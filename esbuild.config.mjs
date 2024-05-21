@@ -2,7 +2,7 @@ import * as esbuild from 'esbuild';
 import process from 'process'
 
 const opts = {
-    entryPoints: ['./src/app.jsx'],
+    entryPoints: ['./src/app.js'],
     bundle: true,
     platform: "node",
     format: "cjs",
@@ -11,6 +11,7 @@ const opts = {
 	sourcemap: "inline",
 	treeShaking: true,
 	outfile: "index.js",
+	packages: "external"
 }
 
 
