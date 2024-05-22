@@ -1,13 +1,13 @@
 import express from "express";
 import { join } from "node:path"
-import db from "./db";
+import db_router from "./db";
 
 const app = express();
 
 app.use( express.static(join(__dirname, "public")) );
+app.use("/data", db_router);
 
 app.get('/', (_req, res) => {
-    //res.send("Hello World")
     res.redirect("/home.html");
 })
 
