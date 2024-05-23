@@ -9,7 +9,6 @@ function createTable(root: HTMLElement, headers: Array<string>): HTMLTableElemen
 
     // Attach column names
     const head = tblEl.createTHead().insertRow();
-    //const head = tblEl.insertRow();
     headers.forEach(name => head.insertCell().innerText = name);
 
     tblEl.createTBody();
