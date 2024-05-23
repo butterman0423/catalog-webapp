@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "npm-run-all -p esbuild-watch server-watch",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-
     "esbuild-watch": "node esbuild.config.mjs",
     "server-watch": "node --watch index.js"
   },
@@ -23,6 +22,7 @@
     "@types/node": "^20.12.12",
     "esbuild": "0.21.3",
     "npm-run-all": "^4.1.5",
+    "tslib": "^2.6.2",
     "typescript": "^5.4.5"
   }
 }
