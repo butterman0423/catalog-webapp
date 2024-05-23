@@ -1,12 +1,12 @@
 import type { RowData } from "./types/db-fetch";
 
-(async () => {
-    const headRes = await fetch("/data/headers/");
-    const headers = JSON.parse(await headRes.text()) as string[];
+async function dbd_fetch<T>(url: string): Promise<T> {
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`Fetch failed on ${url}: ${res.status}, ${res.statusText}`);
+    return JSON.parse(await res.text()) as T;
+}
 
-    const res = await fetch("/data/");
-    const data = JSON.parse(await res.text()) as RowData[];
-    
+async function dbd_build(headers: string[], data: RowData[]) {
     const tblEl = document.createElement("table");
 
     data.forEach(row => {
@@ -15,4 +15,9 @@ import type { RowData } from "./types/db-fetch";
     });
 
     document.body.appendChild(tblEl);
-})();
+}
+
+dbd_fetch<string[]>("/data/headers/")
+.then( headers => Promise.all([headers, dbd_fetch<RowData[]>("/data/")]) )
+.then( ([head, data, ..._]) => dbd_build(head, data))
+.catch(msg => console.log(`Table creation failed: ${msg}`));
