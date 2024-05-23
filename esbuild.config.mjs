@@ -20,8 +20,7 @@ const scriptOpts = {
 	platform: "browser",
 	format: "cjs",
 	logLevel: "info",
-	sourcemap: "inline",
-	treeShaking: true,
+	treeShaking: false,
 	outdir: "./build"
 }
 
