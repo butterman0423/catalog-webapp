@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "npm-run-all -p esbuild-watch server-watch",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "serve": "node index.js",
+
     "esbuild-watch": "node esbuild.config.mjs",
     "server-watch": "node --watch index.js"
   },
