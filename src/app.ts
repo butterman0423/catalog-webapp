@@ -5,6 +5,7 @@ import db_router from "./db";
 const app = express();
 
 app.use( express.static(join(__dirname, "public")) );
+app.use("/scripts", express.static(join(__dirname, "build")));
 app.use("/data", db_router);
 
 app.get('/', (_req, res) => {
