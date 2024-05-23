@@ -15,7 +15,10 @@ const buildOpts = {
 }
 
 const scriptOpts = {
-	entryPoints: ['./src/browser/*.ts'],
+	entryPoints: [
+		'./src/client/*.ts',
+		'./src/client/utils/*.ts'
+	],
 	bundle: false,
 	platform: "browser",
 	format: "cjs",

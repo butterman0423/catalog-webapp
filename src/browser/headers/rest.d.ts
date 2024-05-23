@@ -1,1 +1,0 @@
-export declare function get<T,>(url: string): Promise<T>;
