@@ -14,28 +14,10 @@ const buildOpts = {
 	packages: "external"
 }
 
-const scriptOpts = {
-	entryPoints: [
-		'./src/client/*.ts',
-		'./src/client/utils/*.ts'
-	],
-	bundle: false,
-	platform: "browser",
-	format: "cjs",
-	logLevel: "info",
-	treeShaking: false,
-	outdir: "./build"
-}
-
 if(process.argv[2] === 'production') {
 	await esbuild.build(buildOpts);
-	await esbuild.build(scriptOpts);
 	process.exit(0);
 }
 
 const ctx = await esbuild.context(buildOpts)
-const scrCtx = await esbuild.context(scriptOpts);
-await Promise.all([
-	ctx.watch(),
-	scrCtx.watch()
-])
+await ctx.watch();

@@ -5,11 +5,21 @@ import db_router from "./db";
 const app = express();
 
 app.use( express.static(join(__dirname, "public")) );
-app.use("/scripts", express.static(join(__dirname, "build")));
 app.use("/data", db_router);
 
 app.get('/', (_req, res) => {
-    res.redirect("/home.html");
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>Catalog</title>
+                <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
+            </head>
+            <body>
+                Hello World
+            </body>
+        </html>
+    `);
 })
 
 const PORT = 3000;
