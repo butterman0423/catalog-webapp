@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import db, { init, ColumnInfo, Entry } from "../db";
 
 import Table from '../templates/table';
@@ -8,6 +10,9 @@ init();
 // Serve rendered html files
 
 const router = express.Router();
+
+router.use(cors());
+router.use(express.json());
 
 router.route("/")
 
@@ -26,7 +31,9 @@ router.route("/")
                 <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
             </head>
             <body>
+                <button class="add-btn">+</button>
                 ${Table.build({ data: query, headers: headers })}
+                <script src="/scripts/home-loader.js"></script>
             </body>
         </html>
     `);
@@ -34,7 +41,6 @@ router.route("/")
 
 .post((req, res) => {
     const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (@dtype, @data)`);
-
     const dat = req.body as {dtype: string, data: string};
     stmt.run(dat)
     
