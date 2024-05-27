@@ -19,7 +19,7 @@ export default {
         return (`
             <form id="db-add-form" action="/home/">
                 ${fill(headers)}
-                <input type="submit" name="submit"/>
+                <input type="submit" name="submit" value="Submit"/>
                 <button class="form-cancel">Cancel</button>
             </form>
         `);

@@ -3,7 +3,14 @@
 
     const addBtn = body.querySelector("button.add-btn");
     addBtn.addEventListener("click", async () => {
+        addBtn.disabled = true;
+
         const formRaw = await fetch("/ui/form");
+        if(!formRaw.ok) {
+            addBtn.disabled = false;
+            return;
+        }
+
         body.insertAdjacentHTML("beforeend", await formRaw.text());
 
         const formEl = body.querySelector(`form#db-add-form`);
@@ -33,11 +40,14 @@
                 window.location.replace(res.url);
                 return;
             }
-            
+
             console.log("Failed to send data.");
             formEl.remove();
         })
 
-        cancelEl.addEventListener("click", () => formEl.remove());
+        cancelEl.addEventListener("click", () => {
+            formEl.remove();
+            addBtn.disabled = false;
+        });
     });
 })()
