@@ -1,4 +1,4 @@
-import db, { ColumnInfo, Entry } from "../db";
+import { ColumnInfo, Entry } from "../db";
 
 function setTableAttrs(headers: ColumnInfo[]): string {
     const attrs = headers
@@ -41,21 +41,18 @@ function buildBody(data: Entry[], headers: ColumnInfo[]): string {
     `);
 }
 
-export type TableOptions = {
-
+export type TableConfig = {
+    data: Entry[],
+    headers: ColumnInfo[],
 }
 export default {
-    build: (_opts?: TableOptions) => {
-        const qstmt = db.prepare("SELECT * FROM sample");
-        
-        const query = qstmt.all() as Entry[];
-        const headers = (db.pragma("table_info(sample)") as ColumnInfo[])
-            .filter(col => !col.pk)
+    build: (config: TableConfig) => {
+        const { data, headers } = config;
 
         return (`
             <table class="db-table" ${setTableAttrs(headers)}>
                 ${buildHead(headers)}
-                ${buildBody(query, headers)}
+                ${buildBody(data, headers)}
             </table>
         `);
     },
