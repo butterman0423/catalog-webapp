@@ -1,17 +1,17 @@
 import express from 'express';
-import db, { ColumnInfo, Entry } from "../db";
+import db, { init, ColumnInfo, Entry } from "../db";
 
 import Table from '../templates/table';
+
+init();
 
 // Serve rendered html files
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
-    res.redirect("/home/");
-})
+router.route("/")
 
-router.get("/home/", (req, res) => {
+.get((req, res) => {
     const qstmt = db.prepare("SELECT * FROM sample");
         
     const query = qstmt.all() as Entry[];
@@ -30,6 +30,19 @@ router.get("/home/", (req, res) => {
             </body>
         </html>
     `);
+})
+
+.post((req, res) => {
+    const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (@dtype, @data)`);
+
+    const dat = req.body as {dtype: string, data: string};
+    stmt.run(dat)
+    
+    res.redirect(req.baseUrl);
+})
+
+.put((req, res) => {
+    res.sendStatus(403);
 })
 
 export default router;
