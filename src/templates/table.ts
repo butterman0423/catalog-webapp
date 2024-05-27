@@ -14,7 +14,7 @@ function buildHead(headers: ColumnInfo[]): string {
         .join("\n");
     
     return (`
-        <thead>
+        <thead class="db-table-hd">
             <tr>${cols}</tr>
         </thead>
     `);
@@ -35,7 +35,7 @@ function buildBody(data: Entry[], headers: ColumnInfo[]): string {
         .join("\n");
     
     return (`
-        <tbody>
+        <tbody class="db-table-bdy">
             ${rows}
         </tbody>
     `);
@@ -53,7 +53,7 @@ export default {
             .filter(col => !col.pk)
 
         return (`
-            <table>
+            <table class="db-table" ${setTableAttrs(headers)}>
                 ${buildHead(headers)}
                 ${buildBody(query, headers)}
             </table>
