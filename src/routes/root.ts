@@ -34,21 +34,39 @@ router.route("/")
                 <button class="add-btn">+</button>
                 ${Table.build({ data: query, headers: headers })}
                 <script src="/scripts/home-loader.js"></script>
+
+                <button onclick="fetch('/home/1/', { 
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    mode: 'cors',
+                    body: JSON.stringify({dtype: 'Hello', data: 'World'}),
+                })">Test</button>
+
             </body>
         </html>
     `);
 })
 
 .post((req, res) => {
-    const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (@dtype, @data)`);
+    const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (:dtype, :data)`);
     const dat = req.body as {dtype: string, data: string};
     stmt.run(dat)
     
     res.redirect(req.baseUrl);
 })
 
-.put((req, res) => {
-    res.sendStatus(403);
+router.put("/:pk([0-9]+)/", (req, res) => {
+    const key = req.params["pk"];
+    if(key === "0") {
+        res.sendStatus(403);
+        return;
+    }
+
+    const dat = req.body as {dtype: string, data: string};
+    const update = db.prepare("UPDATE sample SET dtype = :dtype, data = :data WHERE id = :id")
+    update.run({id: key, ...dat});
+
+    res.sendStatus(200);
 })
 
 export default router;
