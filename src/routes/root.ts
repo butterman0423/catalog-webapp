@@ -52,7 +52,7 @@ router.route("/")
     const dat = req.body as {dtype: string, data: string};
     stmt.run(dat)
     
-    res.redirect(req.baseUrl);
+    res.sendStatus(200);
 })
 
 router.put("/:pk([0-9]+)/", (req, res) => {

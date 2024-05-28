@@ -36,12 +36,13 @@
                 redirect: "follow" 
             })
 
-            if(res.ok && res.redirected) {
-                window.location.replace(res.url);
+            if(res.ok) {
+                window.location.reload();
                 return;
             }
 
             console.log("Failed to send data.");
+            addBtn.disabled = false;
             formEl.remove();
         })
 
