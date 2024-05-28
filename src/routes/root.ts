@@ -58,7 +58,7 @@ router.route("/")
 router.put("/:pk([0-9]+)/", (req, res) => {
     const key = req.params["pk"];
     if(key === "0") {
-        res.sendStatus(403);
+        res.sendStatus(406);
         return;
     }
 
