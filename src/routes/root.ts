@@ -31,17 +31,37 @@ router.route("/")
                 <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
             </head>
             <body>
-                <button class="add-btn">+</button>
-                ${Table.build({ data: query, headers: headers })}
+                <div class="app-container">
+                    <div class="tool-container">
+                        <div class="tool-inner-container">
+                            <select></select>
+                        </div>
+
+                        <div class="tool-inner-container">
+                            <button>T</button>
+                            <button>T</button>
+                        </div>
+                    </div>
+
+                    <div class="tool-container">
+                        <div class="tool-inner-container ftool-right">
+                            <button class="tbl-tool btn-tool add-btn">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tbl-container">
+                        ${Table.build({ data: query, headers: headers })}
+                    </div>
+
+                    <div class="tool-container">
+                        <div class="tool-inner-container">
+                            <input type="number"/>
+                            of #
+                        <div>
+                    </div>
+                </div>
+
                 <script src="/scripts/home-loader.js"></script>
-
-                <button onclick="fetch('/home/1/', { 
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    mode: 'cors',
-                    body: JSON.stringify({dtype: 'Hello', data: 'World'}),
-                })">Test</button>
-
             </body>
         </html>
     `);

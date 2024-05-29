@@ -1,3 +1,66 @@
+:root {
+    --max-columns: 8;
+    --max-rows: 20;
+}
+
 body {
     background-color: grey;
+}
+
+.app-container {
+    background-color: aqua;
+    margin: 0 5%;
+}
+
+.tool-container {
+    background-color: blue;
+    display: inline-block;
+}
+
+.tool-container > * {
+    background-color: brown;
+}
+
+.tool-inner-container {
+    display: inline-block;
+}
+
+.ftool-right {
+    justify-self: end;
+}
+
+.tbl-container {
+    background-color: bisque;
+    margin: 10px 0;
+    
+    width: 100%;
+    max-height: 20vh;
+}
+
+.tbl-container table {
+    border-collapse: collapse;
+}
+
+.tbl-cell {
+    --cell-width: calc(100vw / var(--max-columns));
+
+    margin: 0;
+    border: 2px solid black;
+
+    max-width: var(--cell-width);
+    width: var(--cell-width);
+
+    height: calc(20vh / var(--max-rows));
+}
+
+.tbl-head .tbl-cell {
+    background-color: blueviolet;
+}
+
+.tbl-body .tbl-row:nth-child(odd) {
+    background-color: snow;
+}
+
+.tbl-body .tbl-row:nth-child(even) {
+    background-color: lightgray;
 }

@@ -10,12 +10,12 @@ function setTableAttrs(headers: ColumnInfo[]): string {
 
 function buildHead(headers: ColumnInfo[]): string {
     const cols = headers
-        .map(({ name }) => `<td>${name}</td>`)
+        .map(({ name }) => `<td class="tbl-cell">${name}</td>`)
         .join("\n");
     
     return (`
-        <thead class="db-table-hd">
-            <tr>${cols}</tr>
+        <thead class="tbl-head">
+            <tr class="tbl-row">${cols}</tr>
         </thead>
     `);
 }
@@ -23,10 +23,10 @@ function buildHead(headers: ColumnInfo[]): string {
 function buildBody(data: Entry[], headers: ColumnInfo[]): string {
     const rows = data
         .map(dat => `
-            <tr --data-pk="${dat.id}">
+            <tr class="tbl-row" --data-pk="${dat.id}">
                 ${headers
                     .map(({ name }) => `
-                        <td>${(name in dat) ? dat[name] : ""}</td>
+                        <td class="tbl-cell">${(name in dat) ? dat[name] : ""}</td>
                     `)
                     .join("\n")
                 }
@@ -35,7 +35,7 @@ function buildBody(data: Entry[], headers: ColumnInfo[]): string {
         .join("\n");
     
     return (`
-        <tbody class="db-table-bdy">
+        <tbody class="tbl-body">
             ${rows}
         </tbody>
     `);
@@ -50,7 +50,7 @@ export default {
         const { data, headers } = config;
 
         return (`
-            <table class="db-table" ${setTableAttrs(headers)}>
+            <table class="db-tbl" ${setTableAttrs(headers)}>
                 ${buildHead(headers)}
                 ${buildBody(data, headers)}
             </table>
