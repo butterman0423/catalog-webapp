@@ -3,8 +3,10 @@ import { ColumnInfo } from "../db";
 function fill(headers: ColumnInfo[]) {
     return headers
         .map(({ name }, i) => (`
-            <label for="${name}">${name}</label>
-            <input class="form-input" name="${name}" type="text"/>
+            <div class="form-group">
+                <label class="col-md-2" for="${name}">${name}</label>
+                <input class="col-md-10 form-input" name="${name}" type="text"/>
+            </div>
         `))
         .join("\n");
 }
@@ -17,10 +19,12 @@ export default {
         const { headers } = config;
 
         return (`
-            <form id="db-add-form" action="/home/">
+            <form class="form-horizontal" id="db-add-form" action="/home/">
                 ${fill(headers)}
-                <input type="submit" name="submit" value="Submit"/>
-                <button class="form-cancel">Cancel</button>
+                <div class="form-group">
+                    <input class="btn btn-default btn-sm" type="submit" name="submit" value="Submit"/>
+                    <button class="btn btn-default btn-sm form-cancel">Cancel</button>
+                </div>
             </form>
         `);
     },

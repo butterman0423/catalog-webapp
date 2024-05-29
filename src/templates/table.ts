@@ -50,7 +50,7 @@ export default {
         const { data, headers } = config;
 
         return (`
-            <table class="db-tbl" ${setTableAttrs(headers)}>
+            <table class="table table-striped table-bordered" ${setTableAttrs(headers)}>
                 ${buildHead(headers)}
                 ${buildBody(data, headers)}
             </table>
