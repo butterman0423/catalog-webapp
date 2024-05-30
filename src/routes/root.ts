@@ -23,7 +23,6 @@ router.route("/")
         
     const query = qstmt.all() as Entry[];
     const headers = (db.pragma("table_info(sample)") as ColumnInfo[])
-        .filter(col => !col.pk)
 
     res.send(`
         <!DOCTYPE html>
@@ -34,7 +33,7 @@ router.route("/")
                     integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" 
                     crossorigin="anonymous"/>
                 
-                <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"/>
+                <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap.css"/>
                 <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
             </head>
             <body>
@@ -64,10 +63,11 @@ router.route("/")
                 </div>
                 
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-                <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" 
                     integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" 
                     crossorigin="anonymous"></script>
+                <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+                <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap.js"></script>
                 <script src="/scripts/home-loader.js"></script>
             </body>
         </html>
