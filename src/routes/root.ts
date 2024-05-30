@@ -43,14 +43,14 @@ router.route("/")
                         ${Dropdown.build({ title: "TODO", items: ["test"]})}
 
                         <div class="btn-group">
-                            <button class="btn btn-default">T</button>
-                            <button class="btn btn-default">T</button>
-                            <button class="btn btn-default">T</button>
+                            <button class="btn btn-default">New</button>
+                            <button class="btn btn-default">Import</button>
+                            <button class="btn btn-default">Export</button>
                         </div>
 
                         <div class="btn-group pull-right">
                             <button class="btn btn-default add-btn">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                +
                             </button>
                         </div>
                     </div>

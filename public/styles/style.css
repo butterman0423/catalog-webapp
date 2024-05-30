@@ -5,3 +5,7 @@ body {
 .table {
     background-color: snow;
 }
+
+.tbl-container {
+    margin-top: 20px;
+}
