@@ -6,6 +6,7 @@ import db, { init, ColumnInfo, Entry } from "../db";
 import Table from '../templates/table';
 import Form from "../templates/form";
 import Dropdown from "../templates/dropdown";
+import Modal from "../templates/modal";
 
 init();
 
@@ -52,7 +53,7 @@ router.route("/")
                             <button class="btn btn-default">
                                 Edit
                             </button>
-                            <button class="btn btn-default add-btn">
+                            <button class="btn btn-default add-btn" data-toggle="modal" data-target="#db-form-modal">
                                 Add
                             </button>
                         </div>
@@ -62,7 +63,7 @@ router.route("/")
                         ${Table.build({ data: query, headers: headers })}
                     </div>
 
-                    <!--${Form.build({ headers: headers })}-->
+                    ${ Modal.build({ title: "Add New Row", body: Form.build({ headers: headers }) }) }
                 </div>
                 
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
