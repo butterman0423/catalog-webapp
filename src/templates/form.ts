@@ -20,7 +20,7 @@ export default {
         const { headers } = config;
 
         return (`
-            <form class="" id="db-add-form" action="/home/">
+            <form id="db-add-form" action="/home/">
                 ${fill(headers)}
             </form>
         `);
