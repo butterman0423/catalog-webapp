@@ -1,6 +1,10 @@
-function makeMenu(items: string[]) {
+function makeMenu(items: DropItem[]) {
     const tabs = items
-        .map(item => `<li>${item}</li>`)
+        .map(({ href, text }) => `
+            <li>
+                <a class="dropdown-item" href="${href}">${text}</a>
+            </li>
+        `)
         .join("\n");
 
     return (`
@@ -10,20 +14,21 @@ function makeMenu(items: string[]) {
     `);
 }
 
+export type DropItem = {
+    href: string,
+    text: string,
+}
 export type DropConfig = {
     title: string,
-    items: string[],
-
-    noCaret?: boolean,
+    items: DropItem[],
 }
 export default {
     build: (opts: DropConfig) => {
-        const { title, items, noCaret } = opts
+        const { title, items } = opts
         return (`
             <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                    <span>${title}</span>
-                    ${noCaret ? "" : `<span class="caret"></span>`}
+                <button class="btn btn-primary dropdown-toggle me-2" type="button" data-bs-toggle="dropdown">
+                    ${title}
                 </button>
 
                 ${makeMenu(items)}

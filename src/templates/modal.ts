@@ -8,21 +8,19 @@ export default {
 
         return (`
             <div class="modal fade" id="db-form-modal" tab-index=-1>
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                             <h1 class="modal-title">${title}</h1>
+                            <button class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         
-                        <div class="modal-body">
+                        <div class="modal-body px-4">
                             ${body}
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Cancel
                             </button>
                             <button type="button" id="db-form-submit" class="btn btn-primary">

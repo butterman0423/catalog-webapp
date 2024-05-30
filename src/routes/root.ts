@@ -27,33 +27,37 @@ router.route("/")
 
     res.send(`
         <!DOCTYPE html>
-        <html>
+        <html data-bs-theme="dark">
             <head>
                 <title>Catalog</title>
 
                 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>
                 <link rel="stylesheet" type="text/css" href="/datatables-bs5/css/dataTables.bootstrap5.min.css"/>
-                <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
+                <!--<link rel="stylesheet" type="text/css" href="/styles/style.css"/>-->
             </head>
             <body>
                 <div class="container">
                     
-                    <div class="btn-toolbar">
-                        ${Dropdown.build({ title: "TODO", items: ["test"]})}
+                    <div class="row mb-3 mt-3">
+                        <div class="col-10 btn-toolbar">
+                            ${Dropdown.build({ title: "TODO", items: [{href:"#", text:"test"}]})}
 
-                        <div class="btn-group">
-                            <button class="btn btn-default">New</button>
-                            <button class="btn btn-default">Import</button>
-                            <button class="btn btn-default">Export</button>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">New</button>
+                                <button class="btn btn-primary">Import</button>
+                                <button class="btn btn-primary">Export</button>
+                            </div>
                         </div>
 
-                        <div class="btn-group pull-right">
-                            <button id="edit-btn" class="btn btn-default">
-                                Edit
-                            </button>
-                            <button id="add-btn" class="btn btn-default" data-toggle="modal" data-target="#db-form-modal">
-                                Add
-                            </button>
+                        <div class="col-2" btn-toolbar">
+                            <div class="btn-group float-end">
+                                <button id="edit-btn" class="btn btn-primary">
+                                    Edit
+                                </button>
+                                <button id="add-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#db-form-modal">
+                                    Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -65,7 +69,7 @@ router.route("/")
                 </div>
                 
                 <script src="/jquery/jquery.min.js"></script>
-                <script src="/bootstrap/js/bootstrap.min.js"></script>
+                <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
                 <script src="/datatables/dataTables.min.js"></script>
                 <script src="/datatables-bs5/js/dataTables.bootstrap5.js"></script>
                 <script src="/scripts/home-loader.js"></script>
