@@ -25,7 +25,7 @@ export default {
                             <button type="button" class="btn btn-default" data-dismiss="modal">
                                 Cancel
                             </button>
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" id="db-form-submit" class="btn btn-primary">
                                 Submit
                             </button>
                         </div>

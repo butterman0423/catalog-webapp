@@ -50,10 +50,10 @@ router.route("/")
                         </div>
 
                         <div class="btn-group pull-right">
-                            <button class="btn btn-default">
+                            <button id="edit-btn" class="btn btn-default">
                                 Edit
                             </button>
-                            <button class="btn btn-default add-btn" data-toggle="modal" data-target="#db-form-modal">
+                            <button id="add-btn" class="btn btn-default" data-toggle="modal" data-target="#db-form-modal">
                                 Add
                             </button>
                         </div>
