@@ -49,8 +49,11 @@ router.route("/")
                         </div>
 
                         <div class="btn-group pull-right">
+                            <button class="btn btn-default">
+                                Edit
+                            </button>
                             <button class="btn btn-default add-btn">
-                                +
+                                Add
                             </button>
                         </div>
                     </div>
