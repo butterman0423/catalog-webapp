@@ -2,10 +2,10 @@ import { ColumnInfo, Entry } from "../db";
 
 function setTableAttrs(headers: ColumnInfo[]): string {
     const attrs = headers
-        .map(({ name }, i) => `--data-col${i}="${name}"`)
+        .map(({ name }, i) => `data-col${i}="${name}"`)
         .join(" ");
     
-    return (`--data-columns="${headers.length}" ${attrs}`);
+    return (`data-columns="${headers.length}" ${attrs}`);
 }
 
 function buildHead(headers: ColumnInfo[]): string {
@@ -23,7 +23,7 @@ function buildHead(headers: ColumnInfo[]): string {
 function buildBody(data: Entry[], headers: ColumnInfo[]): string {
     const rows = data
         .map(dat => `
-            <tr>
+            <tr data-pk="${dat.id}">
                 ${headers
                     .map(({ name }) => `
                         <td>${(name in dat) ? dat[name] : ""}</td>
