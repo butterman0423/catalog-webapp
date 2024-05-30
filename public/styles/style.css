@@ -1,15 +1,3 @@
 body {
     background-color: grey;
 }
-
-.tbl-container > table {
-    background-color: snow;
-}
-
-.table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #afafaf;
-}
-
-.table > thead > .tbl-row {
-    background-color: blueviolet;
-}

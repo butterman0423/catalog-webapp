@@ -10,12 +10,12 @@ function setTableAttrs(headers: ColumnInfo[]): string {
 
 function buildHead(headers: ColumnInfo[]): string {
     const cols = headers
-        .map(({ name }) => `<td class="tbl-cell">${name}</td>`)
+        .map(({ name }) => `<th>${name}</th>`)
         .join("\n");
     
     return (`
-        <thead class="tbl-head">
-            <tr class="tbl-row">${cols}</tr>
+        <thead>
+            <tr>${cols}</tr>
         </thead>
     `);
 }
@@ -23,10 +23,10 @@ function buildHead(headers: ColumnInfo[]): string {
 function buildBody(data: Entry[], headers: ColumnInfo[]): string {
     const rows = data
         .map(dat => `
-            <tr class="tbl-row" --data-pk="${dat.id}">
+            <tr>
                 ${headers
                     .map(({ name }) => `
-                        <td class="tbl-cell">${(name in dat) ? dat[name] : ""}</td>
+                        <td>${(name in dat) ? dat[name] : ""}</td>
                     `)
                     .join("\n")
                 }
@@ -35,7 +35,7 @@ function buildBody(data: Entry[], headers: ColumnInfo[]): string {
         .join("\n");
     
     return (`
-        <tbody class="tbl-body">
+        <tbody>
             ${rows}
         </tbody>
     `);
@@ -50,7 +50,7 @@ export default {
         const { data, headers } = config;
 
         return (`
-            <table class="table table-striped table-bordered" ${setTableAttrs(headers)}>
+            <table id="datatable" class="display" style="width:100%">
                 ${buildHead(headers)}
                 ${buildBody(data, headers)}
             </table>

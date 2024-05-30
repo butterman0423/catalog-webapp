@@ -4,7 +4,6 @@ import cors from 'cors';
 import db, { init, ColumnInfo, Entry } from "../db";
 
 import Table from '../templates/table';
-import Pager from "../templates/pager";
 import Form from "../templates/form";
 import Dropdown from "../templates/dropdown";
 
@@ -35,8 +34,8 @@ router.route("/")
                     integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" 
                     crossorigin="anonymous"/>
                 
+                <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"/>
                 <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
-                <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             </head>
             <body>
                 <div class="container">
@@ -60,17 +59,12 @@ router.route("/")
                     <div class="tbl-container">
                         ${Table.build({ data: query, headers: headers })}
                     </div>
-                    
-                    <div class="col-md-12" style="padding:0">
-                        <div class="pull-right">
-                            ${Pager.build({})}
-                        </div>
-                    </div>
 
-                    ${Form.build({ headers: headers })}
+                    <!--${Form.build({ headers: headers })}-->
                 </div>
                 
-
+                <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+                <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" 
                     integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" 
                     crossorigin="anonymous"></script>
