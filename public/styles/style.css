@@ -1,11 +1,14 @@
-body {
-    background-color: grey;
+textarea.code-area {
+    background: none;
+    border: none;
+    outline: none;
+    resize: none;
+
+    width: 100%;
+    height: 100%;
 }
 
-.table {
-    background-color: snow;
-}
-
-.tbl-container {
-    margin-top: 20px;
+.code-output {
+    max-width: max-content;
+    overflow: auto;
 }

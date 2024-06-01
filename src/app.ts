@@ -10,7 +10,7 @@ app.use( "/bootstrap/", express.static(join(__dirname, "node_modules/bootstrap/d
 app.use( "/datatables/", express.static(join(__dirname, "node_modules/datatables.net/js")))
 app.use( "/datatables-bs5/", express.static(join(__dirname, "node_modules/datatables.net-bs5")) );
 app.use( "/jquery/", express.static(join(__dirname, "node_modules/jquery/dist")) );
-app.use( "/data/ ", data_router);
+app.use( "/data/", data_router);
 app.use( "/", express.static(join(__dirname, "public")), root_router );
 
 app.get("/", (_req, res) => {

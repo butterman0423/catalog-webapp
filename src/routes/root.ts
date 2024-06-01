@@ -5,6 +5,7 @@ import db, { init, ColumnInfo, Entry } from "../db";
 
 import HTML from "../templates/html";
 import HomePage from '../templates/home-page';
+import ToolPage from '../templates/tool-page'
 
 init();
 
@@ -24,7 +25,15 @@ router.get('/home/', (req, res) => {
     res.send( HTML.build({
         title: "Catalog",
         body: HomePage.build({ headers: headers, query: query }),
-        omit: { myStyles: true }
+        omit: { myStyles: true, toolLoader: true }
+    }) );
+});
+
+router.get('/tool/', (req, res) => {
+    res.send( HTML.build({
+        title: "Catalog: Tool",
+        body: ToolPage.build(),
+        omit: { datatables: true, homeLoader: true}
     }) );
 })
 
