@@ -12,7 +12,9 @@ function formatModal(ev) {
 $(async () => {
 
     // Initialize table look
-    const tbl = $('#datatable').DataTable();
+    const tbl = $('#datatable').DataTable({
+        order: [0, 'desc']
+    });
 
     // Add/Edit functionality
     // $('#edit-btn').on('click', {}, formatModal);
