@@ -18,9 +18,10 @@ router.route('/')
     .post((req, res) => {
         const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (:dtype, :data)`);
         const dat = req.body as {dtype: string, data: string};
-        stmt.run(dat)
-        
-        res.sendStatus(200);
+        const { lastInsertRowid } = stmt.run(dat)
+
+        //res.sendStatus(200);
+        res.send(`${lastInsertRowid}`);
     });
 
 router.put("/:pk([0-9]+)/", (req, res) => {
@@ -62,8 +63,6 @@ router.get("/dev/", (req, res) => {
         const runAll = db.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
             stmts.forEach(({willQuery, stmt, src}) => {
                 if(willQuery) {
-                    console.log(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`);
-                    //output.push('-'.repeat(50) + JSON.stringify(stmt.all()));
                     output.push(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`)
                 }
                 else {
