@@ -74,6 +74,7 @@ router.get("/dev/", (req, res) => {
         runAll(stmts);
         res.status(200).send(output.join("\n"))
     } catch (error) {
+        console.log(error);
         res.sendStatus(400);
     }
 });

@@ -14,10 +14,23 @@ const buildOpts = {
 	packages: "external"
 }
 
+const browOpts = {
+	entryPoints: ['./src/client/**/loader.ts'],
+	bundle: true,
+	platform: "browser",
+	sourcemap: "inline",
+	minify: true,
+	treeShaking: false,
+	outdir: "./public/scripts"
+}
+
 if(process.argv[2] === 'production') {
 	await esbuild.build(buildOpts);
+	await esbuild.build(browOpts);
 	process.exit(0);
 }
 
-const ctx = await esbuild.context(buildOpts)
-await ctx.watch();
+Promise.all([
+	(await esbuild.context(buildOpts)).watch(),
+	(await esbuild.context(browOpts)).watch()
+]);

@@ -1,12 +1,9 @@
-const keys = ["jquery", "bootstrap", "datatables", "myStyles", "homeLoader", "toolLoader"];
+const keys = ["bootstrap", "datatables", "myStyles"];
 
 export type OmitTargets = {
-    jquery?: boolean,
     bootstrap?: boolean,
     datatables?: boolean,
     myStyles?: boolean,
-    homeLoader?: boolean,
-    toolLoader?: boolean,
 
     [k: string]: boolean | undefined
 }
@@ -17,15 +14,6 @@ const cssMap = {
     bootstrap: `<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"/>`,
     datatables: `<link rel="stylesheet" type="text/css" href="/datatables-bs5/css/dataTables.bootstrap5.min.css"/>`,
     myStyles: `<link rel="stylesheet" type="text/css" href="/styles/style.css"/>`
-}
-
-const jsMap = {
-    jquery: `<script src="/jquery/jquery.min.js"></script>`,
-    bootstrap: `<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>`,
-    datatables: `<script src="/datatables/dataTables.min.js"></script>
-    <script src="/datatables-bs5/js/dataTables.bootstrap5.js"></script>`,
-    homeLoader: `<script src="/scripts/home-loader.js"></script>`,
-    toolLoader: `<script src="/scripts/tool-loader.js"></script>`,
 }
 
 function paste(map: Map, omit: OmitTargets | undefined) {
@@ -42,11 +30,12 @@ function paste(map: Map, omit: OmitTargets | undefined) {
 export type HTMLConfig = {
     title: string
     body: string
+    js: string
     omit?: OmitTargets
 }
 export default {
     build: (opts: HTMLConfig) => {
-        const { title, body, omit } = opts;
+        const { title, body, js, omit } = opts;
 
         return (`
             <!DOCTYPE html>
@@ -56,9 +45,8 @@ export default {
                     ${paste(cssMap, omit)}
                 </head>
                 <body>
-                    ${body}
-                    
-                    ${paste(jsMap, omit)}
+                    ${body} 
+                    <script src=${js}></script>
                 </body>
             </html>
         `);

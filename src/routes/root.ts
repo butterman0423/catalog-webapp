@@ -25,7 +25,8 @@ router.get('/home/', (req, res) => {
     res.send( HTML.build({
         title: "Catalog",
         body: HomePage.build({ headers: headers, query: query }),
-        omit: { myStyles: true, toolLoader: true }
+        js: "/scripts/home/loader.js",
+        omit: { myStyles: true }
     }) );
 });
 
@@ -33,7 +34,8 @@ router.get('/tool/', (req, res) => {
     res.send( HTML.build({
         title: "Catalog: Tool",
         body: ToolPage.build(),
-        omit: { datatables: true, homeLoader: true}
+        js: "/scripts/tool/loader.js",
+        omit: { datatables: true, myStyles: true }
     }) );
 })
 

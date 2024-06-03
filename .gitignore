@@ -3,5 +3,6 @@ notes/
 build/
 
 data/*
+public/scripts
 
 index.js

@@ -1,4 +1,8 @@
-function formatModal(ev) {
+import $ from 'jquery';
+import 'datatables.net-bs5';
+import { Modal } from 'bootstrap';
+
+function formatModal(ev: JQuery.ClickEvent) {
     const modal = $('#db-form-modal');
     
     modal.find('.modal-title')
@@ -10,7 +14,7 @@ function formatModal(ev) {
 }
 
 $(async () => {
-
+    
     // Initialize table look
     const tbl = $('#datatable').DataTable({
         order: [0, 'desc']
@@ -30,13 +34,11 @@ $(async () => {
     $('#db-form-submit').on('click', () => {
         submitBtn.addClass('disabled');
 
-        const fields = {};
+        const fields: {[k: string]: any} = {};
         $('input.form-input').each((_, el) => {
             const self = $(el);
-            fields[self.prop('name')] = self.val();
+            fields[(self.prop('name') as string)] = self.val();
         });
-
-        console.log(fields);
 
         $.ajax(submitBtn.data('url'), {
             method: submitBtn.data('method'),
@@ -50,7 +52,10 @@ $(async () => {
                 .add( [parseInt(id)].concat(Object.values(fields)) )
                 .draw();
             
-            $('#db-form-modal').modal('hide');
+            //$(...).modal('hide') causes .modal() is not function issue
+            const modal = Modal.getInstance($('#db-form-modal').get(0) as HTMLElement) as Modal;
+            modal.hide();
+            
             $('input.form-input').each((_, el) => {
                 const self = $(el);
                 self.val("");
