@@ -10,7 +10,9 @@ $(() => {
             $('#output').text(res);
         } 
         catch(err) {
-            console.log("Failed")
+            const jqxhr = err as JQueryXHR;
+            console.log("Failed:", jqxhr.responseText);
+            $('#output').text(jqxhr.responseText);
         }
 
         setTimeout(

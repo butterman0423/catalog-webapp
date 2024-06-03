@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import db, { ColumnInfo, Entry } from "../db";
-import type { Statement } from 'better-sqlite3';
+import type { SqliteError, Statement } from 'better-sqlite3';
 
 const router = express.Router();
 
@@ -75,7 +75,7 @@ router.get("/dev/", (req, res) => {
         res.status(200).send(output.join("\n"))
     } catch (error) {
         console.log(error);
-        res.sendStatus(400);
+        res.status(400).send((error as Error).toString());
     }
 });
 
