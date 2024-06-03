@@ -31,7 +31,7 @@ $(async () => {
 
     // Modal form functionality
     const submitBtn = $('#db-form-submit')
-    $('#db-form-submit').on('click', () => {
+    $('#db-form-submit').on('click', async () => {
         submitBtn.addClass('disabled');
 
         const fields: {[k: string]: any} = {};
@@ -40,28 +40,28 @@ $(async () => {
             fields[(self.prop('name') as string)] = self.val();
         });
 
-        $.ajax(submitBtn.data('url'), {
-            method: submitBtn.data('method'),
-            data: JSON.stringify(fields),
-            processData: false,
-            contentType: "application/json",
-            dataType: "text"
-        })
-        .done(id => {
+        try {
+            const pkStr = await $.ajax({
+                url: submitBtn.data('url'),
+                method: submitBtn.data('method'),
+                data: JSON.stringify(fields),
+                processData: false,
+                contentType: "application/json",
+                dataType: "text"
+            });
+
             tbl.row
-                .add( [parseInt(id)].concat(Object.values(fields)) )
+                .add( [parseInt(pkStr)].concat(Object.values(fields)) )
                 .draw();
             
             //$(...).modal('hide') causes .modal() is not function issue
             const modal = Modal.getInstance($('#db-form-modal').get(0) as HTMLElement) as Modal;
             modal.hide();
-            
-            $('input.form-input').each((_, el) => {
-                const self = $(el);
-                self.val("");
-            });
-        })
-        .fail(() => console.log("Request failed"))
-        .always(() => submitBtn.removeClass('disabled'));
+        } 
+        catch(err) {
+            console.log("Request failed", err)
+        }
+
+        submitBtn.removeClass('disabled');
     });
 })
