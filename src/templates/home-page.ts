@@ -18,10 +18,9 @@ export default {
                 <div class="col-10 btn-toolbar">
                     ${Dropdown.build({ title: "TODO", items: [{href:"#", text:"test"}]})}
 
-                    <div class="btn-group">
+                    <div class="btn-group tbl-config">
                         <button class="btn btn-primary">New</button>
                         <button class="btn btn-primary">Import</button>
-                        <button class="btn btn-primary">Export</button>
                     </div>
                 </div>
 

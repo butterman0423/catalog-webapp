@@ -1,8 +1,9 @@
 import $ from 'jquery';
-import 'datatables.net-bs5';
-import 'datatables.net-buttons-bs5';
-import 'datatables.net-select-bs5';
 import { Modal } from 'bootstrap';
+import 'datatables.net-bs5';
+import './btns';
+import 'datatables.net-select-bs5';
+
 
 function formatModal(ev: JQuery.ClickEvent) {
     const modal = $('#db-form-modal');
@@ -16,11 +17,27 @@ function formatModal(ev: JQuery.ClickEvent) {
 }
 
 $(async () => {
-    
     // Initialize table look
     const tbl = $('#datatable').DataTable({
-        order: [0, 'desc']
+        order: [0, 'desc'],
+        buttons: [
+            {
+                name: "exports",
+                extend: 'collection',
+                text: 'Export',
+                className: 'btn-primary',
+                // @ts-expect-error
+                buttons: ['csv', 'excel', 'print']
+            }
+        ]
     });
+
+    tbl
+    .buttons('exports:name')
+    .container()
+    .find('.btn')
+    .removeClass('btn-secondary')
+    .appendTo($('.tbl-config'));
 
     // Add/Edit functionality
     // $('#edit-btn').on('click', {}, formatModal);
@@ -33,7 +50,7 @@ $(async () => {
 
     // Modal form functionality
     const submitBtn = $('#db-form-submit')
-    $('#db-form-submit').on('click', async () => {
+    submitBtn.on('click', async () => {
         submitBtn.addClass('disabled');
 
         const fields: {[k: string]: any} = {};
