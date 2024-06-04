@@ -61,13 +61,18 @@ router.get("/dev/", (req, res) => {
 
         let output: string[] = [];
         const runAll = db.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
-            stmts.forEach(({willQuery, stmt, src}) => {
-                if(willQuery) {
-                    output.push(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`)
-                }
-                else {
+            stmts.forEach( ({ willQuery, stmt, src }) => {
+                if(willQuery)
+                    //output.push(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`)
+                    output.push(`
+                    <div>
+                        <div>${'-'.repeat(50)}</div>
+                        <div>${src}</div>
+                        <div>${JSON.stringify(stmt.all()).slice(1, -1)}</div>
+                    </div>
+                    `);
+                else
                     stmt.run();
-                }
             })
         );
         

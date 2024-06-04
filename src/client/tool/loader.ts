@@ -7,7 +7,8 @@ $(() => {
 
         try {
             const res = await $.get('/data/dev/', { code: $('#input').val() });
-            $('#output').text(res);
+            //$('#output').text(res);
+            $('#output').append(res);
         } 
         catch(err) {
             const jqxhr = err as JQueryXHR;
