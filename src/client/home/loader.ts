@@ -1,40 +1,10 @@
 import $ from 'jquery';
-import { Modal } from 'bootstrap';
+import 'bootstrap';
 import 'datatables.net-bs5';
-import './btns';
 import 'datatables.net-select-bs5';
+import './btns';
 
-type ModalData = {
-    title: string,
-    url: string,
-    method: string,
-    target?: HTMLElement
-}
-
-function formatModal(dat: ModalData) {
-    const modal = $('#db-form-modal');
-    let url = dat.url;
-
-    if(dat.target) {
-        const row = $(dat.target);
-        url += row.data("pk");
-
-        const inputs = $('input.form-input');
-        row.children('td:not(:first-child)')
-        .each((i, el) => {
-            $(inputs.get(i) as HTMLElement)
-            .val($(el).text())
-        });
-    }
-    
-    modal.find('.modal-title')
-        .text(dat.title);
-    
-    modal.find('#db-form-submit')
-        .data('url', url)
-        .data('method', dat.method)
-        .data('editing', dat.target !== undefined);
-}
+import * as Modal from './modal';
 
 $(async () => {
     // Initialize table look
@@ -75,10 +45,8 @@ $(async () => {
             alert("Please Select a Row to Edit.")
         }
         else {
-            formatModal({target: target, ...data});
-            const modal = Modal.getOrCreateInstance('#db-form-modal');
-            console.log(modal)
-            modal.show();
+            Modal.formatModal({target: target, ...data});
+            Modal.getModal().show();
         }
             
     });
@@ -87,17 +55,12 @@ $(async () => {
         title: "Add New Row",
         url: "/data/",
         method: "POST"
-    }, ({ data }) => formatModal(data));
+    }, ({ data }) => Modal.formatModal(data));
 
     // Modal form functionality
     $('#db-form-submit').on('click', async function() {
         $(this).addClass('disabled');
-
-        const fields: {[k: string]: any} = {};
-        $('input.form-input').each((_, el) => {
-            const self = $(el);
-            fields[(self.prop('name') as string)] = self.val();
-        });
+        const fields = Modal.readFields();
 
         try {
             const res = await $.ajax({
@@ -110,25 +73,18 @@ $(async () => {
             });
 
             if($(this).data('editing')) {
-                const vals = Object.values(fields);
-                $('.selected td:not(:first-child)')
-                .each(function(i) {
-                    $(this).text(vals[i]);
-                })
-
+                Modal.toRow('.selected');
                 tbl.row('.selected').deselect();
             }
             else {
-                $(  tbl.row
-                    .add( [parseInt(res)].concat(Object.values(fields)) )
-                    .node()
+                $(tbl.row
+                  .add( [parseInt(res)].concat(Object.values(fields)) )
+                  .node()
                 ).data('pk', res);
                 tbl.draw();
             }
             
-            //$(...).modal('hide') causes .modal() is not function issue
-            const modal = Modal.getOrCreateInstance('#db-form-modal');
-            modal.hide();
+            Modal.getModal().hide();
         } 
         catch(err) {
             console.log("Request failed", err)
