@@ -1,38 +1,12 @@
 import $ from 'jquery';
 import 'bootstrap';
-import 'datatables.net-bs5';
-import 'datatables.net-select-bs5';
+import DTinit from './datatable'
 import './btns';
 
 import * as Modal from './modal';
 
 $(async () => {
-    // Initialize table look
-    const tbl = $('#datatable').DataTable({
-        order: [0, 'desc'],
-        buttons: [
-            {
-                name: "exports",
-                extend: 'collection',
-                text: 'Export',
-                className: 'btn-primary',
-                // @ts-expect-error
-                buttons: ['csv', 'excel', 'print']
-            }
-        ],
-        select: {
-            style: 'single',
-            items: 'row',
-            info: false
-        }
-    });
-
-    tbl
-    .buttons('exports:name')
-    .container()
-    .find('.btn')
-    .removeClass('btn-secondary')
-    .appendTo($('.tbl-config'));
+    const tbl = DTinit();
 
     // Add/Edit functionality
     $('#edit-btn').on('click', {
