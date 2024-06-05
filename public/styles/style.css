@@ -12,3 +12,9 @@ textarea.code-area {
     max-width: max-content;
     overflow: auto;
 }
+
+.col-search {
+    display: block;
+    padding: 3px;
+    width: 100%;
+}

@@ -31,5 +31,24 @@ export default function init() {
     .removeClass('btn-secondary')
     .appendTo($('.tbl-config'));
 
+    // Add column search bars
+    tbl
+    .columns()
+    .every(function() {
+        const col = this;
+        const header = $(this.header());
+        const title = header.text();
+
+        header
+        .append(`<input class="col-search" placeholder="Search ${title}" type="text"/>`)
+        .find("input")
+        .on('keyup', function(e) {
+            if (col.search() !== this.value) {
+                col.search(this.value).draw();
+            }
+        })
+        .on('click', e => e.stopPropagation());
+    })
+
     return tbl;
 }

@@ -26,7 +26,6 @@ router.get('/home/', (req, res) => {
         title: "Catalog",
         body: HomePage.build({ headers: headers, query: query }),
         js: "/scripts/home/loader.js",
-        omit: { myStyles: true }
     }) );
 });
 
