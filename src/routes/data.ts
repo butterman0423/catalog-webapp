@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import db, { ColumnInfo, Entry } from "../db";
+import { DB } from "../db";
 import type { SqliteError, Statement } from 'better-sqlite3';
 
+const db = new DB("sample");
 const router = express.Router();
 
 router.use(cors());
@@ -10,31 +11,24 @@ router.use(express.json());
 
 router.route('/')
     .get((req, res) => {
-        const qstmt = db.prepare("SELECT * FROM sample");
-        const query = qstmt.all() as Entry[];
-
+        const query = db.select();
         res.send(query);
     })
     .post((req, res) => {
-        const stmt = db.prepare(`INSERT INTO sample (dtype, data) VALUES (:dtype, :data)`);
-        const dat = req.body as {dtype: string, data: string};
-        const { lastInsertRowid } = stmt.run(dat)
+        const { lastInsertRowid } = db.insert(req.body);
 
         //res.sendStatus(200);
         res.send(`${lastInsertRowid}`);
     });
 
 router.put("/:pk([0-9]+)/", (req, res) => {
-    const key = req.params["pk"];
-    if(key === "0") {
+    const key = parseInt(req.params["pk"]);
+    if(key === 0) {
         res.sendStatus(406);
         return;
     }
 
-    const dat = req.body as {dtype: string, data: string};
-    const update = db.prepare("UPDATE sample SET dtype = :dtype, data = :data WHERE id = :id")
-    update.run({id: key, ...dat});
-
+    db.update(key, req.body);
     res.sendStatus(200);
 });
 
@@ -43,6 +37,8 @@ router.put("/:pk([0-9]+)/", (req, res) => {
 const sqlRegex = /\s(?=\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bCREATE\b)/gi
 
 router.get("/dev/", (req, res) => {
+    // For simplicity, use the raw SQLite Database
+    const rdb = db.raw();
     try {
         const code = req.query['code'] as string;
         if(!code) 
@@ -52,7 +48,7 @@ router.get("/dev/", (req, res) => {
             .split(sqlRegex)
             .map(cmd => ({
                 willQuery: cmd.match(/\bSELECT\b/i) !== null,
-                stmt: db.prepare(cmd),
+                stmt: rdb.prepare(cmd),
                 src: cmd
             }));
 
@@ -60,7 +56,7 @@ router.get("/dev/", (req, res) => {
             throw Error("No valid SQLite statements")
 
         let output: string[] = [];
-        const runAll = db.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
+        const runAll = rdb.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
             stmts.forEach( ({ willQuery, stmt, src }) => {
                 if(willQuery)
                     //output.push(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`)

@@ -1,0 +1,15 @@
+{
+    "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
+    "date1": "DATE NOT NULL",
+    "date2": "DATE NOT NULL",
+    "item": "TEXT NOT NULL",
+    "price1": "REAL NOT NULL",
+    "priceMod": "TEXT",
+    "price2": "REAL NOT NULL",
+    "price3": "REAL NOT NULL",
+    "price4": "REAL NOT NULL",
+    "location": "TEXT NOT NULL",
+    "package": "TEXT NOT NULL",
+    "buyer": "TEXT NOT NULL",
+    "comment": "TEXT"
+}
