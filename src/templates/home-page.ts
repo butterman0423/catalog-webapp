@@ -6,11 +6,10 @@ import type { ColumnInfo, Entry } from 'src/db';
 
 export type HomePageConfig = {
     headers: ColumnInfo[]
-    query: Entry[]
 }
 export default {
     build: (opts: HomePageConfig) => {
-        const { headers, query } = opts;
+        const { headers } = opts;
         
         return (`
         <div class="container">   
@@ -37,7 +36,7 @@ export default {
             </div>
             
             <div class="tbl-container">
-                ${Table.build({ data: query, headers: headers })}
+                ${Table.build({ headers: headers })}
             </div>
 
             ${ Modal.build({ title: "Add New Row", body: Form.build({ headers: headers }) }) }

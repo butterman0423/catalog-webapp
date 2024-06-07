@@ -22,11 +22,10 @@ router.use(cors());
 router.use(express.json());
 
 router.get('/home/', (req, res) => {
-    const query = db.select();
     const headers = db.headers();
     res.send( HTML.build({
         title: "Catalog",
-        body: HomePage.build({ headers: headers, query: query }),
+        body: HomePage.build({ headers: headers }),
         js: "/scripts/home/loader.js",
     }) );
 });

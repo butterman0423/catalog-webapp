@@ -6,7 +6,7 @@ import './btns';
 import * as Modal from './modal';
 
 $(async () => {
-    const tbl = DTinit();
+    const tbl = await DTinit();
 
     // Add/Edit functionality
     $('#edit-btn').on('click', {
@@ -54,7 +54,7 @@ $(async () => {
                 $(tbl.row
                   .add( [parseInt(res)].concat(Object.values(fields)) )
                   .node()
-                ).data('pk', res);
+                )
                 tbl.draw();
             }
             

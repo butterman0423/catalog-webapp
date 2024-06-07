@@ -22,7 +22,7 @@ export function formatModal(dat: ModalData) {
 
     if(dat.target) {
         const row = $(dat.target);
-        url += row.data("pk");
+        url += row.children('td:first-child').text();
 
         const inputs = $('input.form-input');
         row.children('td:not(:first-child)')

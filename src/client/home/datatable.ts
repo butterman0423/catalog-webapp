@@ -3,8 +3,25 @@ import 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
 import './btns';
 
-export default function init() {
+type Columns = {
+    name: string,
+    type: string,
+    notnull: boolean,
+    pk: boolean
+}
+
+async function fetchHeaders(): Promise<Columns[]> {
+    return $.ajax("/data/headers");
+}
+
+export default async function init() {
+    const heads = await fetchHeaders();
+    const cols = heads
+        .map(({ name }) => ({ data: name }))
+
     const tbl = $('#datatable').DataTable({
+        ajax: "/data/",
+        columns: cols,
         order: [0, 'desc'],
         buttons: [
             {

@@ -16,7 +16,7 @@ router.use(express.json());
 router.route('/')
     .get((req, res) => {
         const query = db.select();
-        res.send(query);
+        res.send({ data: query });
     })
     .post((req, res) => {
         const { lastInsertRowid } = db.insert(req.body);
@@ -34,6 +34,11 @@ router.put("/:pk([0-9]+)/", (req, res) => {
 
     db.update(key, req.body);
     res.sendStatus(200);
+});
+
+router.get("/headers/", (req, res) => {
+    const headers = db.headers();
+    res.send(headers);
 });
 
 
