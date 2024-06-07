@@ -57,7 +57,7 @@ export class DB<Fields extends Config> {
         if(cols.length > 0) {
             const tar = "? ".repeat(cols.length);
             return this.db.prepare(`SELECT ${tar} FROM ${this.name}`)
-                .all() as Entry[];
+                .all(cols) as Entry[];
         }
         return this.db.prepare(`SELECT * FROM ${this.name}`).all() as Entry[];
     }
