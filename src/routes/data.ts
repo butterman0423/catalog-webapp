@@ -3,7 +3,11 @@ import cors from 'cors';
 import { DB } from "../db";
 import type { SqliteError, Statement } from 'better-sqlite3';
 
-const db = new DB("sample");
+const db = new DB("sample1", { 
+    id: "INTEGER PRIMARY KEY AUTOINCREMENT", 
+    dtype: "TEXT NOT NULL", 
+    data: "TEXT NOT NULL"}
+);
 const router = express.Router();
 
 router.use(cors());
