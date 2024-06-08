@@ -3,12 +3,30 @@ import { ColumnInfo } from "../db";
 function fill(headers: ColumnInfo[]) {
     return headers
         .filter( ({ pk }) => !pk )
-        .map(({ name, notnull }) => (`
-            <div class="mb-4">
-                <label class="form-label ${notnull ? "required" : ""}" for="${name}">${name}</label>
-                <input class="form-control form-input" name="${name}" type="text"/>
-            </div>
-        `))
+        .map(({ name, notnull, type }) => {
+            const isReq = notnull ? "required" : "";
+            let itype;
+            switch(type) {
+                case "INTEGER":
+                case "REAL":
+                    itype = "number";
+                    break;
+                
+                case "DATE":
+                    itype = "date";
+                    break;
+                
+                default:
+                    itype = "text"
+            }
+
+            return (`
+                <div class="mb-4">
+                    <label class="form-label ${isReq}" for="${name}">${name}</label>
+                    <input class="form-control form-input" type="${itype}" name="${name}" type="text"/>
+                </div>
+                `);
+            })
         .join("\n");
 }
 

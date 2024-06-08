@@ -6,7 +6,9 @@ import type { SqliteError, Statement } from 'better-sqlite3';
 const db = new DB("sample1", { 
     id: "INTEGER PRIMARY KEY AUTOINCREMENT", 
     dtype: "TEXT NOT NULL", 
-    data: "TEXT NOT NULL"}
+    data: "TEXT NOT NULL",
+    date: "DATE NOT NULL"
+}
 );
 const router = express.Router();
 

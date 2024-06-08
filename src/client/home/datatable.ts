@@ -51,13 +51,28 @@ export default async function init() {
     // Add column search bars
     tbl
     .columns()
-    .every(function() {
+    .every(function(i) {
         const col = this;
         const header = $(this.header());
         const title = header.text();
 
+        let type;
+        switch(heads[i].type) {
+            case "INTEGER":
+            case "REAL":
+                type = "number";
+                break;
+            
+            case "DATE":
+                type = "date";
+                break;
+            
+            default:
+                type = "text"
+        }
+
         header
-        .append(`<input class="col-search" placeholder="Search ${title}" type="text"/>`)
+        .append(`<input class="col-search" type="${type}"placeholder="Search ${title}" type="text"/>`)
         .find("input")
         .on('keyup', function(e) {
             if (col.search() !== this.value) {
