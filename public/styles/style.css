@@ -22,3 +22,7 @@ textarea.code-area {
 .required::after {
     content: '*'
 }
+
+table th {
+    min-width: 100px;
+}
