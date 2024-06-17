@@ -7,13 +7,7 @@ import ToolPage from '../templates/tool-page'
 
 import { DB } from "../db"
 
-const db = new DB("sample1", { 
-    id: "INTEGER PRIMARY KEY AUTOINCREMENT", 
-    dtype: "TEXT NOT NULL", 
-    data: "TEXT NOT NULL",
-    date: "DATE NOT NULL"
-}
-);
+const db = new DB("sample1");
 db.init();
 
 // Serve rendered html files
