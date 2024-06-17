@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import 'datatables.net-bs5';
+import DataTable from 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
+import 'datatables.net-searchpanes-dt'
 import './btns';
 
 type Columns = {
@@ -23,16 +24,6 @@ export default async function init() {
         ajax: "/data/",
         columns: cols,
         order: [0, 'desc'],
-        buttons: [
-            {
-                name: "exports",
-                extend: 'collection',
-                text: 'Export',
-                className: 'btn-primary',
-                // @ts-expect-error
-                buttons: ['csv', 'excel', 'print']
-            }
-        ],
         select: {
             style: 'single',
             items: 'row',
@@ -40,15 +31,52 @@ export default async function init() {
         },
     });
 
+    new DataTable.Buttons(tbl, [
+        {
+            name: "exports",
+            extend: 'collection',
+            text: 'Export',
+            className: 'btn-primary',
+            // @ts-expect-error
+            buttons: ['csv', 'excel', 'print']
+        },
+        {
+            name: 'filter-btn',
+            text: 'Filter',
+            className: 'btn-primary filter-btn',
+            action: function() {
+                const container = $('#dt-panes');
+                container.prop('hidden', !container.prop('hidden'))
+            }
+        }
+    ])
+
+    new DataTable.SearchPanes(tbl, {
+        
+    })
+
+    // Add Search Panes
+    tbl.searchPanes.container().appendTo($('#dt-panes'));
+    tbl.searchPanes.resizePanes()
+    
     // Add export buttons
     tbl
     .buttons('exports:name')
     .container()
-    .find('.btn')
+    .find('.btn:not(.filter-btn)')
     .removeClass('btn-secondary')
     .appendTo($('.tbl-config'));
 
+    // Add filter button
+    tbl
+    .buttons('filter-btn:name')
+    .container()
+    .find('.filter-btn')
+    .removeClass('btn-secondary')
+    .prependTo($('.tbl-tooling'))
+
     // Add column search bars
+    /*
     tbl
     .columns()
     .every(function(i) {
@@ -80,7 +108,9 @@ export default async function init() {
             }
         })
         .on('click', e => e.stopPropagation());
+        
     })
+    */
 
     return tbl;
 }

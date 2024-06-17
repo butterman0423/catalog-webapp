@@ -24,7 +24,7 @@ export default {
                 </div>
 
                 <div class="col-2" btn-toolbar">
-                    <div class="btn-group float-end">
+                    <div class="btn-group float-end tbl-tooling">
                         <button id="edit-btn" class="btn btn-primary">
                             Edit
                         </button>
@@ -34,6 +34,8 @@ export default {
                     </div>
                 </div>
             </div>
+
+            <div id="dt-panes" class="row" hidden></div>
             
             <div class="tbl-container">
                 ${Table.build({ headers: headers })}

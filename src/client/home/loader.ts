@@ -52,7 +52,7 @@ $(async () => {
             }
             else {
                 $(tbl.row
-                  .add( [parseInt(res)].concat(Object.values(fields)) )
+                  .add( { id: parseInt(res), ...fields } )
                   .node()
                 )
                 tbl.draw();
