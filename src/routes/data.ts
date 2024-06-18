@@ -63,11 +63,11 @@ router.post("/import", async (req, res) => {
             const merge = db.raw().transaction((items: VarMap[]) => {
                 for(let item of items) {
                     console.log("merging", item)
-                    const id = item.id;
+                    const uuid = item.uuid;
                     delete item.id;
 
-                    if(id) 
-                        db.update(id, item);
+                    if(uuid) 
+                        db.update(uuid, item);
                     else
                         db.insert(item)
                 }
