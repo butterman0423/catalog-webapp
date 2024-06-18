@@ -1,6 +1,6 @@
 {
     "pk": "INTEGER PRIMARY KEY AUTOINCREMENT",
-    "uuid": "TEXT NOT NULL",
+    "uuid": "TEXT UNIQUE NOT NULL",
     "shipping_date": "DATE NOT NULL",
     "transaction_date": "DATE NOT NULL",
     "item_description": "TEXT NOT NULL",

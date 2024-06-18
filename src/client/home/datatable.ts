@@ -24,7 +24,6 @@ export default async function init() {
         ajax: "/data/",
         columns: cols,
         scrollX: true,
-        order: [0, 'desc'],
         select: {
             style: 'single',
             items: 'row',
