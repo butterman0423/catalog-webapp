@@ -23,6 +23,15 @@ export default async function init() {
     const tbl = $('#datatable').DataTable({
         ajax: "/data/",
         columns: cols,
+        columnDefs: [
+            {
+                target: 0,
+                searchable: false,
+                orderable: false,
+                visible: false
+            }
+        ],
+        order: [[1, 'desc']],
         scrollX: true,
         select: {
             style: 'single',
