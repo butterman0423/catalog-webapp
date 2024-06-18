@@ -31,6 +31,33 @@ $(async () => {
         method: "POST"
     }, ({ data }) => Modal.formatModal(data));
 
+    // Import Button
+    $('#import-btn').on('click', () => {
+        $('#import-btn-hidden').trigger('click');
+    })
+
+    $('#import-btn-hidden').on('input', async function() {
+        const fd = new FormData();
+        // @ts-ignore
+        const file = $(this)[0].files[0];
+        fd.append('file', file);
+
+        try {
+            await $.post({
+                url: '/data/import',
+                processData: false,
+                contentType: false,
+                data: fd
+            });
+
+            location.reload();
+        }
+        catch(err) {
+            console.log("Import Failed", err)
+        }
+
+    })
+
     // Modal form functionality
     $('#db-form-submit').on('click', async function() {
         $(this).addClass('disabled');

@@ -1,6 +1,7 @@
 node_modules/
 notes/
 build/
+tmp/
 
 data/*
 public/scripts

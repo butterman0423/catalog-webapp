@@ -2,12 +2,24 @@ import express from 'express';
 import cors from 'cors';
 import { DB } from "../db";
 import type { SqliteError, Statement } from 'better-sqlite3';
+import csvConvert from 'convert-csv-to-json';
+import fileUpload from 'express-fileupload'
+
+type FileInfo = {
+    name: string,
+    tempFilePath: string
+}
+
+type VarMap = { [key: string]: any }
 
 const db = new DB("sample1");
 const router = express.Router();
 
 router.use(cors());
 router.use(express.json());
+router.use(fileUpload({ 
+    useTempFiles: true 
+}))
 
 router.route('/')
     .get((req, res) => {
@@ -36,6 +48,47 @@ router.get("/headers/", (req, res) => {
     const headers = db.headers();
     res.send(headers);
 });
+
+router.post("/import", async (req, res) => {
+    const file = req.files?.file;
+    if(!file) {
+        res.sendStatus(400);
+        return;
+    }
+    
+    let { name, tempFilePath } = file as FileInfo;
+    const ext = name.substring(name.indexOf('.') + 1);
+
+    switch(ext) {
+        case 'csv':
+            const json = csvConvert
+                .fieldDelimiter(',')
+                .supportQuotedField(true)
+                .formatValueByType(true)
+                .getJsonFromCsv(tempFilePath);
+
+            const merge = db.raw().transaction((items: VarMap[]) => {
+                for(let item of items) {
+                    console.log("merging", item)
+                    const id = item.id;
+                    delete item.id;
+
+                    if(id) 
+                        db.update(id, item);
+                    else
+                        db.insert(item)
+                }
+            });
+
+            merge(json)
+            break;
+        default:
+            res.sendStatus(400);
+            return;
+    }
+
+    res.sendStatus(200);
+})
 
 
 /** ROUTE SPECIFICALLY FOR TOOLING **/

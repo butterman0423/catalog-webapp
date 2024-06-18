@@ -19,7 +19,8 @@ export default {
 
                     <div class="btn-group tbl-config">
                         <button class="btn btn-primary">New</button>
-                        <button class="btn btn-primary">Import</button>
+                        <button id="import-btn" class="btn btn-primary">Import</button>
+                        <input id="import-btn-hidden" type="file" accept=".xlsx, .csv" style="display:none">
                     </div>
                 </div>
 

@@ -2,7 +2,7 @@ import express from "express";
 import { join } from "node:path"
 
 import root_router from "./routes/root";
-import data_router from "./routes/data";
+import data_router from "./routes/data.js";
 
 const app = express();
 
