@@ -64,7 +64,7 @@ $(async () => {
         const fields = Modal.readFields();
 
         try {
-            const res = await $.ajax({
+            const uuid = await $.ajax({
                 url: $(this).data('url'),
                 method: $(this).data('method'),
                 data: JSON.stringify(fields),
@@ -79,7 +79,7 @@ $(async () => {
             }
             else {
                 $(tbl.row
-                  .add( { id: parseInt(res), ...fields } )
+                  .add( { uuid: uuid, ...fields } )
                   .node()
                 )
                 tbl.draw();

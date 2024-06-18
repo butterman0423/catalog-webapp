@@ -2,7 +2,7 @@ import { ColumnInfo } from "../db";
 
 function fill(headers: ColumnInfo[]) {
     return headers
-        .filter( ({ pk }) => !pk )
+        .filter( ({ pk, name }) => !pk && name !== 'uuid' )
         .map(({ name, notnull, type }) => {
             const isReq = notnull ? "required" : "";
             let itype;

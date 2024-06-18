@@ -27,26 +27,19 @@ router.route('/')
         res.send({ data: query });
     })
     .post((req, res) => {
-        const { lastInsertRowid } = db.insert(req.body);
-
-        //res.sendStatus(200);
-        res.send(`${lastInsertRowid}`);
+        const uuid = db.insert(req.body);
+        res.send(uuid);
     });
 
-router.put("/:pk([0-9]+)/", (req, res) => {
-    const key = parseInt(req.params["pk"]);
-    if(key === 0) {
-        res.sendStatus(406);
-        return;
-    }
-
+router.put("/:uuid/", (req, res) => {
+    const key = req.params["uuid"];
     db.update(key, req.body);
     res.sendStatus(200);
 });
 
 router.get("/headers/", (req, res) => {
     const headers = db.headers();
-    res.send(headers);
+    res.send(headers.filter(({pk}) => !pk));
 });
 
 router.post("/import", async (req, res) => {

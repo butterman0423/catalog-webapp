@@ -2,6 +2,7 @@ import { ColumnInfo, Entry } from "../db";
 
 function buildHead(headers: ColumnInfo[]): string {
     const cols = headers
+        .filter(({ pk }) => !pk)
         .map(({ name }) => `<th>${name}</th>`)
         .join("\n");
     
