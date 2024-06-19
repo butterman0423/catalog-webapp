@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
-import 'datatables.net-searchpanes-dt'
 import './btns';
 
 type Columns = {
@@ -59,14 +58,6 @@ export default async function init() {
             }
         }
     ])
-
-    new DataTable.SearchPanes(tbl, {
-        
-    })
-
-    // Add Search Panes
-    tbl.searchPanes.container().appendTo($('#dt-panes'));
-    tbl.searchPanes.resizePanes()
     
     // Add export buttons
     tbl
@@ -83,43 +74,6 @@ export default async function init() {
     .find('.filter-btn')
     .removeClass('btn-secondary')
     .prependTo($('.tbl-tooling'))
-
-    // Add column search bars
-    /*
-    tbl
-    .columns()
-    .every(function(i) {
-        const col = this;
-        const header = $(this.header());
-        const title = header.text();
-
-        let type;
-        switch(heads[i].type) {
-            case "INTEGER":
-            case "REAL":
-                type = "number";
-                break;
-            
-            case "DATE":
-                type = "date";
-                break;
-            
-            default:
-                type = "text"
-        }
-
-        header
-        .append(`<input class="col-search" type="${type}"placeholder="Search ${title}" type="text"/>`)
-        .find("input")
-        .on('keyup', function(e) {
-            if (col.search() !== this.value) {
-                col.search(this.value).draw();
-            }
-        })
-        .on('click', e => e.stopPropagation());
-        
-    })
-    */
 
     return tbl;
 }
