@@ -2,15 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import { DB } from "../db";
 import type { SqliteError, Statement } from 'better-sqlite3';
-import csvConvert from 'convert-csv-to-json';
 import fileUpload from 'express-fileupload'
+
+import { process } from 'src/merger';
 
 type FileInfo = {
     name: string,
     tempFilePath: string
 }
-
-type VarMap = { [key: string]: any }
 
 const db = new DB("sample1");
 const router = express.Router();
@@ -54,25 +53,7 @@ router.post("/import", async (req, res) => {
 
     switch(ext) {
         case 'csv':
-            const json = csvConvert
-                .fieldDelimiter(',')
-                .supportQuotedField(true)
-                .formatValueByType(true)
-                .getJsonFromCsv(tempFilePath);
-
-            const merge = db.raw().transaction((items: VarMap[]) => {
-                for(let item of items) {
-                    const uuid = item.uuid;
-                    delete item.id;
-
-                    if(uuid) 
-                        db.update(uuid, item);
-                    else
-                        db.insert(item)
-                }
-            });
-
-            merge(json)
+            await process(tempFilePath, db)
             break;
         default:
             res.sendStatus(400);
