@@ -58,6 +58,4 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
             }
         }
     }
-
-    return true;
 }
