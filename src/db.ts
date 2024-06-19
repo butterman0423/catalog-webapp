@@ -61,16 +61,7 @@ export class DB<Fields extends Config> {
         this.db.prepare(`CREATE TABLE IF NOT EXISTS ${this.name} (${entries})`)
         .run();
     }
-
-    _select(...cols: Array<keyof Fields>): Entry[] {
-        if(cols.length > 0) {
-            const tar = "? ".repeat(cols.length);
-            return this.db.prepare(`SELECT ${tar} FROM ${this.name}`)
-                .all(cols) as Entry[];
-        }
-        return this.db.prepare(`SELECT * FROM ${this.name}`).all() as Entry[];
-    }
-
+    
     select(proj?: (keyof Fields)[] | 'all', sel?: Selector<Fields>[] | null, lim?: number, off?: number): Entry[] {
         const frags: string[] = [];
         const args: any[] = [];
