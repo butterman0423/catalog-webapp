@@ -1,5 +1,4 @@
 import type { ColumnInfo } from "./db";
-import moment from 'moment'
 
 type VarRow = { [k: string]: any }
 
@@ -43,7 +42,8 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
             switch(type) {
                 case 'DATE':
                     // TODO: Support other formats and convert to this one (if possible)
-                    if(!moment(val, 'YYYY-MM-DD', true).isValid())
+                    const date = new Date(val);
+                    if(date.toString() === 'Invalid Date')
                         throw Error(`DATE entry is not valid: ${val}`)
                     break;
                 case 'REAL':
