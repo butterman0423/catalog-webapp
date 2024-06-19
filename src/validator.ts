@@ -31,13 +31,14 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
     for(const conf of confs) {
         const { name, type, notnull } = conf;
         const val = input[name];
+        const isEmpty = !val || val === '"';
 
-        if(notnull) {
-            // Required check
-            // " is an empty value apparently
-            if(!val || val === '"')
-                throw Error(`A required field is null in column ${name}`)
+        // Required check
+        // " is an empty value apparently
+        if(notnull && isEmpty)
+            throw Error(`A required field is null in column ${name}`)
 
+        if(!isEmpty) {
             // Type Check
             switch(type) {
                 case 'DATE':
