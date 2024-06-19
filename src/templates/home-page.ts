@@ -15,10 +15,7 @@ export default {
         <div class="container">   
             <div class="row mb-3 mt-3">
                 <div class="col-10 btn-toolbar">
-                    ${Dropdown.build({ title: "TODO", items: [{href:"#", text:"test"}]})}
-
                     <div class="btn-group tbl-config">
-                        <button class="btn btn-primary">New</button>
                         <button id="import-btn" class="btn btn-primary">Import</button>
                         <input id="import-btn-hidden" type="file" accept=".xlsx, .csv" style="display:none">
                     </div>
