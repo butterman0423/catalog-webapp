@@ -30,7 +30,7 @@ export async function checkCSVColumns(inputs: string[], headers: string[]) {
 export function checkRow(input: VarRow, confs: ColumnInfo[]) {
     for(const conf of confs) {
         const { name, type, notnull } = conf;
-        const val = input[name];
+        let val = input[name];
         const isEmpty = !val || val === '"';
 
         // Required check
@@ -47,11 +47,14 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
                         throw Error(`DATE entry is not valid: ${val}`)
                     break;
                 case 'REAL':
-                    if(typeof val !== 'number')
+                    if(typeof val !== 'number' && !(val=parseFloat(val)))
                         throw Error(`REAL entry is not valid: ${val}`)
                     input[name] = (val as number).toFixed(2);
                     break;
                 case 'INTEGER':
+                    if(typeof val === 'string')
+                        val = parseInt(val);
+
                     if(!Number.isInteger(val))
                         throw Error(`INTEGER entry is not valid: ${val}`)
                     break;
