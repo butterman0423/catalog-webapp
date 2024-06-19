@@ -32,12 +32,14 @@ export class DB<Fields extends Config> {
     db: SQLite3.Database
     conf: Fields
     name: string
+    private _headers: ColumnInfo[] | null;
 
     constructor(name: string, conf?: Fields) {
         this.db = new Database(DB_PATH);
 
         this.name = name;
         this.conf = (conf || DEFAULT) as Fields;
+        this._headers = null;
 
         // "name" and "conf" are subject to injections
         check(this.name);
@@ -97,7 +99,11 @@ export class DB<Fields extends Config> {
     }
 
     headers(): ColumnInfo[] {
-        return this.db.pragma(`table_info(${this.name})`) as ColumnInfo[]
+        if(this._headers)
+            return this._headers;
+
+        this._headers = this.db.pragma(`table_info(${this.name})`) as ColumnInfo[];
+        return this._headers;
     }
 
     raw(): SQLite3.Database {
