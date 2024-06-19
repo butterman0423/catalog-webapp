@@ -6,8 +6,14 @@ import DEFAULT from 'default_tbl.json'
 
 const DB_PATH = join(__dirname, "/data/data.db");
 
+type ValType = string | number
 type Config = { [key: string]: string };
-type FieldArgs<T> = { [k in keyof T as Exclude<k, ['pk', 'uuid']>]: string | number }
+type FieldArgs<T> = { [k in keyof T as Exclude<k, ['pk', 'uuid']>]: ValType }
+type Selector<T> = {
+    target: keyof T,
+    op: '=' | 'LIKE' | 'BETWEEN',
+    to: ValType | ValType[]
+}
 
 function makeSlots(pttn: string, amount: number) {
     return pttn + `, ${pttn}`.repeat(amount - 1);
@@ -56,13 +62,60 @@ export class DB<Fields extends Config> {
         .run();
     }
 
-    select(...cols: Array<keyof Fields>): Entry[] {
+    _select(...cols: Array<keyof Fields>): Entry[] {
         if(cols.length > 0) {
             const tar = "? ".repeat(cols.length);
             return this.db.prepare(`SELECT ${tar} FROM ${this.name}`)
                 .all(cols) as Entry[];
         }
         return this.db.prepare(`SELECT * FROM ${this.name}`).all() as Entry[];
+    }
+
+    select(proj?: (keyof Fields)[] | 'all', sel?: Selector<Fields>[] | null, lim?: number, off?: number): Entry[] {
+        const frags: string[] = [];
+        const args: any[] = [];
+
+        if(!proj || proj === 'all') {
+            frags.push(`SELECT * FROM ${this.name}`)
+        }
+        else if(proj.length === 0) {
+            return [];
+        }
+        else {
+            const tar = "? ".repeat(proj.length);
+            frags.push(`SELECT ${tar} FROM ${this.name}`);
+            args.concat(proj);
+        }
+
+        if(sel && sel.length > 0) {
+            frags.push("WHERE");
+            const clauses = sel
+                .map(({ target, op, to}) => {
+                    check(target as string); 
+                    check(op);
+
+                    const tar = Array.isArray(to) ? '? '.repeat(to.length) : '?';
+                    return `${target as string} ${op} ${tar}`
+                })
+                .join(" AND ");
+            const subArgs = sel
+                .map(({ to }) => to)
+                .flat();
+            
+            frags.push(clauses);
+            args.concat(subArgs);
+        }
+
+        if(lim) {
+            frags.push(`LIMIT ${lim}`);
+        }
+
+        if(off) {
+            frags.push(`OFFSET ${off}`)
+        }
+
+        const stmt = frags.join(' ');
+        return this.db.prepare(stmt).all(args) as Entry[];
     }
 
     insert(dat: FieldArgs<Fields>): string {
