@@ -32,27 +32,29 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
         const { name, type, notnull } = conf;
         const val = input[name];
 
-        // Required check
-        // " is an empty value apparently
-        if(notnull && (!val || val === '"'))
-            throw Error(`A required field is null in column ${name}`)
+        if(notnull) {
+            // Required check
+            // " is an empty value apparently
+            if(!val || val === '"')
+                throw Error(`A required field is null in column ${name}`)
 
-        // Type Check
-        switch(type) {
-            case 'DATE':
-                // TODO: Support other formats and convert to this one (if possible)
-                if(!moment(val, 'YYYY-MM-DD', true).isValid())
-                    throw Error(`DATE entry is not valid: ${val}`)
-                break;
-            case 'REAL':
-                if(typeof val !== 'number')
-                    throw Error(`REAL entry is not valid: ${val}`)
-                input[name] = (val as number).toFixed(2);
-                break;
-            case 'INTEGER':
-                if(!Number.isInteger(val))
-                    throw Error(`INTEGER entry is not valid: ${val}`)
-                break;
+            // Type Check
+            switch(type) {
+                case 'DATE':
+                    // TODO: Support other formats and convert to this one (if possible)
+                    if(!moment(val, 'YYYY-MM-DD', true).isValid())
+                        throw Error(`DATE entry is not valid: ${val}`)
+                    break;
+                case 'REAL':
+                    if(typeof val !== 'number')
+                        throw Error(`REAL entry is not valid: ${val}`)
+                    input[name] = (val as number).toFixed(2);
+                    break;
+                case 'INTEGER':
+                    if(!Number.isInteger(val))
+                        throw Error(`INTEGER entry is not valid: ${val}`)
+                    break;
+            }
         }
     }
 
