@@ -4,6 +4,7 @@ import { DB } from "../db";
 import type { SqliteError, Statement } from 'better-sqlite3';
 import fileUpload from 'express-fileupload'
 
+import { checkRow } from '../validator'
 import { process } from 'src/merger';
 
 type FileInfo = {
@@ -26,12 +27,24 @@ router.route('/')
         res.send({ data: query });
     })
     .post((req, res) => {
-        const uuid = db.insert(req.body);
+        const headers = db.headers()
+            .filter(({ pk, name }) => !pk && name !== 'uuid');
+        const dat = req.body;
+
+        checkRow(dat, headers);
+
+        const uuid = db.insert(dat);
         res.send(uuid);
     });
 
 router.put("/:uuid/", (req, res) => {
     const key = req.params["uuid"];
+    const headers = db.headers()
+            .filter(({ pk, name }) => !pk && name !== 'uuid');
+    const dat = req.body;
+
+    checkRow(dat, headers);
+
     db.update(key, req.body);
     res.sendStatus(200);
 });
