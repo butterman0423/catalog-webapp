@@ -64,7 +64,7 @@ export class DB<Fields extends Config> {
     
     select(proj?: (keyof Fields)[] | 'all', sel?: Selector<Fields>[] | null, lim?: number, off?: number): Entry[] {
         const frags: string[] = [];
-        const args: any[] = [];
+        let args: any[] = [];
 
         if(!proj || proj === 'all') {
             frags.push(`SELECT * FROM ${this.name}`)
@@ -75,7 +75,7 @@ export class DB<Fields extends Config> {
         else {
             const tar = "? ".repeat(proj.length);
             frags.push(`SELECT ${tar} FROM ${this.name}`);
-            args.concat(proj);
+            args = args.concat(proj);
         }
 
         if(sel && sel.length > 0) {
@@ -85,7 +85,7 @@ export class DB<Fields extends Config> {
                     check(target as string); 
                     check(op);
 
-                    const tar = Array.isArray(to) ? '? '.repeat(to.length) : '?';
+                    const tar = Array.isArray(to) ? to.map(() => '?').join(' AND ') : '?';
                     return `${target as string} ${op} ${tar}`
                 })
                 .join(" AND ");
@@ -94,7 +94,7 @@ export class DB<Fields extends Config> {
                 .flat();
             
             frags.push(clauses);
-            args.concat(subArgs);
+            args = args.concat(subArgs);
         }
 
         if(lim) {
