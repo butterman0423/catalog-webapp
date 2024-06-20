@@ -1,6 +1,7 @@
 import Table from '../templates/table';
 import Form from "../templates/form";
 import Dropdown from "../templates/dropdown";
+import DateRange from "../templates/date-range"
 import Modal from "../templates/modal";
 import type { ColumnInfo, Entry } from 'src/db';
 
@@ -33,7 +34,17 @@ export default {
                 </div>
             </div>
 
-            <div id="dt-panes" class="row" hidden></div>
+            <div id="dt-panes" class="row" hidden>
+                ${ 
+                    headers.filter(({ type }) => type === 'DATE')
+                        .map(({ name }) => DateRange.build({ name }))
+                        .join('\n') 
+                }
+                <div class="col-12">
+                    <button id="dt-panes-submit" class="float-end btn btn-secondary">Submit</button>
+                </div>
+                
+            </div>
             
             <div class="tbl-container">
                 ${Table.build({ headers: headers })}

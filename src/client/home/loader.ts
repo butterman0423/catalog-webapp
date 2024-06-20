@@ -93,4 +93,25 @@ $(async () => {
 
         $(this).removeClass('disabled');
     });
+
+    // Filtering
+    $('#dt-panes-submit').on('click', () => {
+        const frags: string[] = []
+
+        $('#dt-panes > .date-range').each(function() {
+            const key = $(this).data('name');
+            const vFrom = $(this).find(`input#${key}-from`).val();
+            const vTo = $(this).find(`input#${key}-to`).val();
+
+            if(!vFrom || !vTo)
+                return;
+
+            frags.push(`${key}[]=BETWEEN`);
+            frags.push(`${key}[]=${vFrom}`);
+            frags.push(`${key}[]=${vTo}`);
+        });
+
+        const qstr = frags.join("&");
+        tbl.ajax.url(`/data?${qstr}`).load();
+    });
 })

@@ -23,7 +23,29 @@ router.use(fileUpload({
 
 router.route('/')
     .get((req, res) => {
-        const query = db.select();
+        delete req.query['_'];  // Temporary
+        
+        const qkeys = Object.keys(req.query);
+        let sel: any | null = null;
+
+        if(qkeys.length > 0) {
+            sel = qkeys
+                .map((k) => {
+                    // TODO: Add key validation
+
+                    const v = req.query[k] as string[];
+                    if(!v)
+                        throw Error(`Invalid query parameter: ${k}=${v}`);
+
+                    return {
+                        target: k,
+                        op: v[0],
+                        to: v.length > 2 ? v.slice(1) : v[1]
+                    }
+                });
+        }
+
+        const query = db.select('all', sel);
         res.send({ data: query });
     })
     .post((req, res) => {
