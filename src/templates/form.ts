@@ -8,6 +8,7 @@ function fill(headers: ColumnInfo[]) {
         .map(({ name, notnull, type }) => {
             const isReq = notnull ? "required" : "";
             let itype;
+            console.log(type)
             switch(type) {
                 case "INTEGER":
                 case "REAL":
@@ -23,7 +24,12 @@ function fill(headers: ColumnInfo[]) {
             return (`
                 <div class="mb-4">
                     <label class="form-label ${isReq}" for="${name}">${name}</label>
-                    <input class="form-control form-input" type="${itype}" name="${name}" type="text"/>
+                    <input 
+                        class="form-control form-input" 
+                        type="${itype}" 
+                        name="${name}" 
+                        ${isReq}
+                    />
                 </div>
                 `);
             })
