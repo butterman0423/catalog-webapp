@@ -19,7 +19,8 @@ $(async () => {
             alert("Please Select a Row to Edit.")
         }
         else {
-            Modal.formatModal({target: target, ...data});
+            const dat = tbl.row('', { selected: true }).data()
+            Modal.formatModal({ target: dat, ...data });
             Modal.getModal().show();
         }
             
@@ -74,7 +75,7 @@ $(async () => {
             });
 
             if($(this).data('editing')) {
-                Modal.toRow('.selected');
+                Modal.toRow(tbl.row('', { selected : true }), fields);
                 tbl.row('.selected').deselect();
             }
             else {

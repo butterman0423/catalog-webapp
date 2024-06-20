@@ -1,11 +1,13 @@
 import $ from 'jquery';
 import { Modal } from 'bootstrap';
+import type { ApiRowMethods } from 'datatables.net-bs5';
 
+type RowData = { [k: string]: any }
 type ModalData = {
     title: string,
     url: string,
     method: string,
-    target?: HTMLElement
+    target?: RowData
 }
 
 const inputSelector = 'input.form-input';
@@ -21,15 +23,8 @@ export function formatModal(dat: ModalData) {
     let url = dat.url;
 
     if(dat.target) {
-        const row = $(dat.target);
-        url += row.children('td:first-child').text();
-
-        const inputs = $('input.form-input');
-        row.children('td')
-        .each((i, el) => {
-            $(inputs.get(i) as HTMLElement)
-            .val($(el).text())
-        });
+        url += dat.target['uuid'];
+        fillFields(dat.target);
     }
     
     modal.find('.modal-title')
@@ -50,23 +45,19 @@ export function readFields(): {[k: string]: any} {
     return fields;
 }
 
-export function fillFields(selector: string) {
-    const row = $(selector);
-    const inputs = $('input.form-input');
-
-    row.children('td:not(:first-child)')
-    .each((i, el) => {
-        $(inputs.get(i) as HTMLElement)
-        .val($(el).text())
+export function fillFields(dat: RowData) {
+    const inputs = $(inputSelector);
+    inputs.each(function() {
+        const name = $(this).prop("name");
+        $(this).val(dat[name]);
     });
 }
 
-export function toRow(selector: string) {
-    const row = $(selector);
-    const els = $(inputSelector);
+export function toRow(row: ApiRowMethods<any>, newDat: RowData) {
+    const dat = row.data();
+    for(const key in newDat) {
+        dat[key] = newDat[key];
+    }
 
-    row.children("td:not(:first-child)")
-    .each(function(i) {
-        $(this).text( $(els.get(i) as HTMLElement).val() as string );
-    });
+    row.data(dat);
 }
