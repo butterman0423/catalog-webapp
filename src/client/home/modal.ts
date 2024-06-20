@@ -25,7 +25,7 @@ export function formatModal(dat: ModalData) {
         url += row.children('td:first-child').text();
 
         const inputs = $('input.form-input');
-        row.children('td:not(:first-child)')
+        row.children('td')
         .each((i, el) => {
             $(inputs.get(i) as HTMLElement)
             .val($(el).text())
