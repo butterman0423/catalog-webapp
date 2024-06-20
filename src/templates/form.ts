@@ -1,5 +1,7 @@
 import { ColumnInfo } from "../db";
 
+import DateTime from "./datetime";
+
 function fill(headers: ColumnInfo[]) {
     return headers
         .filter( ({ pk, name }) => !pk && name !== 'uuid' )
@@ -13,9 +15,7 @@ function fill(headers: ColumnInfo[]) {
                     break;
                 
                 case "DATE":
-                    itype = "date";
-                    break;
-                
+                    return DateTime.build({ name, required: notnull })
                 default:
                     itype = "text"
             }

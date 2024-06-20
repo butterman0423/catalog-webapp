@@ -63,7 +63,7 @@ $(async () => {
     $('#db-form-submit').on('click', async function() {
         $(this).addClass('disabled');
         const fields = Modal.readFields();
-
+        console.log(fields);
         try {
             const uuid = await $.ajax({
                 url: $(this).data('url'),
@@ -115,4 +115,29 @@ $(async () => {
         const qstr = frags.join("&");
         tbl.ajax.url(`/data?${qstr}`).load();
     });
+
+    // Datetime buttons
+    $('button.btn-time-local').on('click', function(e) {
+        e.preventDefault();
+
+        const target = $(this).data('loc-target');
+        const datetime = new Date().toLocaleString('en-us', {
+            timeZone: 'America/New_York',
+            hour12: false,
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            year: 'numeric'
+        });
+
+        const frags = datetime.match(/\d+/g);
+        if(!frags || frags.length < 5)
+            throw Error("Failed to get current datetime");
+
+        const iso = `${frags[2]}-${frags[0]}-${frags[1]}T${frags[3]}:${frags[4]}`;
+        $(this).parent()
+            .find(`input[name=${target}]`)
+            .val(iso)
+    })
 })

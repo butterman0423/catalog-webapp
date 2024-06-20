@@ -10,7 +10,7 @@ type ModalData = {
     target?: RowData
 }
 
-const inputSelector = 'input.form-input';
+const inputSelector = '#db-form-modal input.form-input';
 
 //$(...).modal('hide') causes .modal() is not function issue
 

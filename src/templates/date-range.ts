@@ -1,3 +1,5 @@
+import DateTime from './datetime';
+
 export type DateRangeOpts = {
     name: string
 }
@@ -10,10 +12,8 @@ export default {
         <div class="date-range col-4" data-name="${name}">
             <span>${name} : </span>
             <div>
-                <label for="${name}-from">From</label>
-                <input id="${name}-from" type="date" name="${name}-from"/>
-                <label for="${name}-to">To</label>
-                <input id="${name}-to" type="date" name="${name}-to"/>
+                ${ DateTime.build({ name: 'From', nameAttr: `${name}-from` }) }
+                ${ DateTime.build({ name: 'To', nameAttr: `${name}-to` }) }
             </div>
         </div>
         `);
