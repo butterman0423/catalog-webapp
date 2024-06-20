@@ -129,25 +129,23 @@ router.get("/dev/", (req, res) => {
         if(stmts.length === 0) 
             throw Error("No valid SQLite statements")
 
-        let output: string[] = [];
+        const output: ({ query: string, dat: any, cols: string[] })[] = []
         const runAll = rdb.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
             stmts.forEach( ({ willQuery, stmt, src }) => {
-                if(willQuery)
-                    //output.push(`${'-'.repeat(50)}\n${src}\n${JSON.stringify(stmt.all())}`)
-                    output.push(`
-                    <div>
-                        <div>${'-'.repeat(50)}</div>
-                        <div>${src}</div>
-                        <div>${JSON.stringify(stmt.all()).slice(1, -1)}</div>
-                    </div>
-                    `);
+                if(willQuery) {
+                    const dat = stmt.raw().all() as any;
+                    const cols = stmt.columns()
+                        .map(({ name }) => name);
+                    output.push({ query: src, dat, cols });
+                }
+                    
                 else
                     stmt.run();
             })
         );
         
         runAll(stmts);
-        res.status(200).send(output.join("\n"))
+        res.send(output);
     } catch (error) {
         console.log(error);
         res.status(400).send((error as Error).toString());

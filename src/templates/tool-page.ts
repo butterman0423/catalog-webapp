@@ -25,7 +25,7 @@ export default {
                         <div class="card-header">
                             Output
                         </div>
-                        <div id="output" class="code-output p-4"></div>
+                        <div id="output" class="code-output p-4 overflow-scroll"></div>
                     </div>
                 </div>
             </div>
