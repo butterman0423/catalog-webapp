@@ -55,7 +55,11 @@ export async function process(path: string, db: DB<any>) {
         .formatValueByType(true)
         .getJsonFromCsv(path);
 
-    json.forEach(v => checkRow(v, headers));
+    json.forEach(v => { 
+        const res = checkRow(v, headers);
+        if(!res.passed) 
+            throw Error(res.details.toString())
+    });
 
     // Push to DB
     const merge = db.raw().transaction((items: VarMap[]) => {

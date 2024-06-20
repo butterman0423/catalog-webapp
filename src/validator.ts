@@ -1,6 +1,7 @@
 import type { ColumnInfo } from "./db";
 
 type VarRow = { [k: string]: any }
+type Report = { passed: boolean, details: VarRow }
 
 // Valid CSV file
 // - Matching Column Names
@@ -26,16 +27,21 @@ export async function checkCSVColumns(inputs: string[], headers: string[]) {
 // - string ? DATE
 // - number ? REAL (two decimal places)
 // - NON NULL Fields
-export function checkRow(input: VarRow, confs: ColumnInfo[]) {
+export function checkRow(input: VarRow, confs: ColumnInfo[]): Report {
+    let passed = true;
+    const details: VarRow = {};
+
     for(const conf of confs) {
         const { name, type, notnull } = conf;
         let val = input[name];
-        const isEmpty = !val || val === '"';
+        const isEmpty = !val || val === '"';    // " is an empty value in csv-converter
 
         // Required check
-        // " is an empty value apparently
-        if(notnull && isEmpty)
-            throw Error(`A required field is null in column ${name}`)
+        if(notnull && isEmpty) {
+            passed = false;
+            details[name] = 'Missing Value'
+            continue;
+        }
 
         if(!isEmpty) {
             // Type Check
@@ -43,22 +49,32 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]) {
                 case 'DATE':
                     // TODO: Support other formats and convert to this one (if possible)
                     const date = new Date(val);
-                    if(date.toString() === 'Invalid Date')
-                        throw Error(`DATE entry is not valid: ${val}`)
+                    if(date.toString() === 'Invalid Date') {
+                        passed = false;
+                        details[name] = `Passed date is not valid: ${val}`;
+                    }
                     break;
                 case 'REAL':
-                    if(typeof val !== 'number' && !(val=parseFloat(val)))
-                        throw Error(`REAL entry is not valid: ${val}`)
-                    input[name] = (val as number).toFixed(2);
+                    if(typeof val !== 'number' && !(val=parseFloat(val))) {
+                        passed = false;
+                        details[name] = `Passed number is not valid: ${val}`;
+                    }
+                    else {
+                        input[name] = (val as number).toFixed(2);
+                    }
                     break;
                 case 'INTEGER':
                     if(typeof val === 'string')
                         val = parseInt(val);
 
-                    if(!Number.isInteger(val))
-                        throw Error(`INTEGER entry is not valid: ${val}`)
+                    if(!Number.isInteger(val)) {
+                        passed = false;
+                        details[name] = `Passed integer is not valid: ${val}`;
+                    }
                     break;
             }
         }
     }
+
+    return { passed, details }
 }

@@ -53,7 +53,10 @@ router.route('/')
             .filter(({ pk, name }) => !pk && name !== 'uuid');
         const dat = req.body;
 
-        checkRow(dat, headers);
+        const valRes = checkRow(dat, headers);
+        if(!valRes.passed) {
+            res.status(403).send(valRes.details);
+        }
 
         const uuid = db.insert(dat);
         res.send(uuid);
@@ -65,7 +68,10 @@ router.put("/:uuid/", (req, res) => {
             .filter(({ pk, name }) => !pk && name !== 'uuid');
     const dat = req.body;
 
-    checkRow(dat, headers);
+    const valRes = checkRow(dat, headers);
+    if(!valRes.passed) {
+        res.status(403).send(valRes.details);
+    }
 
     db.update(key, req.body);
     res.sendStatus(200);
