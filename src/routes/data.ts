@@ -56,6 +56,7 @@ router.route('/')
         const valRes = checkRow(dat, headers);
         if(!valRes.passed) {
             res.status(403).send(valRes.details);
+            return;
         }
 
         const uuid = db.insert(dat);
@@ -71,6 +72,7 @@ router.put("/:uuid/", (req, res) => {
     const valRes = checkRow(dat, headers);
     if(!valRes.passed) {
         res.status(403).send(valRes.details);
+        return;
     }
 
     db.update(key, req.body);
