@@ -12,7 +12,7 @@ export default {
         const isReq = required ? "required" : "";
 
         return (`
-        <div>
+        <div class="mb-4 has-validation">
             <label for="${nameAttr}" class="form-label ${isReq}">${name}</label>
             <input 
                 type="datetime-local" 

@@ -22,6 +22,13 @@ export function formatModal(dat: ModalData) {
     const modal = $('#db-form-modal');
     let url = dat.url;
 
+    $(inputSelector).each(function() {
+        const tar = $(this).parent();
+        tar.removeClass('failed-input');
+        $(this).removeClass('is-invalid')
+        tar.val('');
+    })
+
     if(dat.target) {
         url += dat.target['uuid'];
 
@@ -59,6 +66,22 @@ export function fillFields(dat: RowData) {
         const name = $(this).prop("name");
         $(this).val(dat[name]);
     });
+}
+
+export function writeFieldErrors(json: { [k: string]: string }) {
+    $(inputSelector).each(function() {
+        const name = $(this).prop('name') as string;
+        const tar = $(this).parent();
+        if(name in json) {
+            tar.attr('data-fail-reason', json[name]);
+            tar.addClass('failed-input');
+            $(this).addClass('is-invalid')
+        }
+        else {
+            tar.removeClass('failed-input')
+            $(this).removeClass('is-invalid')
+        }
+    })
 }
 
 export function toRow(row: ApiRowMethods<any>, newDat: RowData) {

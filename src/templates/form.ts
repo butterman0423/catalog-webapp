@@ -21,7 +21,7 @@ function fill(headers: ColumnInfo[]) {
             }
 
             return (`
-                <div class="mb-4">
+                <div class="mb-4 has-validation">
                     <label class="form-label ${isReq}" for="${name}">${name}</label>
                     <input 
                         class="form-control form-input" 

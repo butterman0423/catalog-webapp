@@ -26,3 +26,9 @@ textarea.code-area {
 table th {
     min-width: 100px;
 }
+
+.failed-input::after {
+    display: block;
+    content: attr(data-fail-reason);
+    color: red;
+}

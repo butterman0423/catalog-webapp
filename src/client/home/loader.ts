@@ -63,7 +63,7 @@ $(async () => {
     $('#db-form-submit').on('click', async function() {
         $(this).addClass('disabled');
         const fields = Modal.readFields();
-        console.log(fields);
+
         try {
             const uuid = await $.ajax({
                 url: $(this).data('url'),
@@ -89,7 +89,11 @@ $(async () => {
             Modal.getModal().hide();
         } 
         catch(err) {
-            console.log("Request failed", err)
+            const { responseText } = err as JQueryXHR;
+            const res = JSON.parse(responseText)
+
+            console.log("Request failed", res);
+            Modal.writeFieldErrors(res);
         }
 
         $(this).removeClass('disabled');
