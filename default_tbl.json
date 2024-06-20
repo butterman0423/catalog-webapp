@@ -5,7 +5,7 @@
     "transaction_date": "DATE NOT NULL",
     "item_description": "TEXT NOT NULL",
     "list_price": "REAL NOT NULL",
-    "transaction_fees": "TEXT",
+    "transaction_fees": "REAL",
     "shipping_cost": "REAL NOT NULL",
     "earnings": "REAL NOT NULL",
     "purchase_price": "REAL NOT NULL",

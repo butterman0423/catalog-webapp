@@ -8,7 +8,6 @@ function fill(headers: ColumnInfo[]) {
         .map(({ name, notnull, type }) => {
             const isReq = notnull ? "required" : "";
             let itype;
-            console.log(type)
             switch(type) {
                 case "INTEGER":
                 case "REAL":
