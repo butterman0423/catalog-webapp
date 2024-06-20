@@ -24,7 +24,15 @@ export function formatModal(dat: ModalData) {
 
     if(dat.target) {
         url += dat.target['uuid'];
+
+        modal.find('.db-form-target')
+            .show()
+            .text(dat.target['uuid']);
+
         fillFields(dat.target);
+    }
+    else {
+        modal.find('.db-form-target').hide();
     }
     
     modal.find('.modal-title')

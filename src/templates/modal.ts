@@ -11,7 +11,11 @@ export default {
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title">${title}</h1>
+                            <div class="row">
+                                <h1 class="modal-title">${title}</h1>
+                                <p class="db-form-target"></p>
+                            </div>
+                            
                             <button class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         
