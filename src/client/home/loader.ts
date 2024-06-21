@@ -3,6 +3,7 @@ import 'bootstrap';
 import DTinit from './datatable'
 import './btns';
 
+import { dateToISO } from 'src/date-converter';
 import * as Modal from './modal';
 
 $(async () => {
@@ -125,21 +126,11 @@ $(async () => {
         e.preventDefault();
 
         const target = $(this).data('loc-target');
-        const datetime = new Date().toLocaleString('en-us', {
-            timeZone: 'America/New_York',
-            hour12: false,
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            year: 'numeric'
-        });
+        const iso = dateToISO(new Date());
 
-        const frags = datetime.match(/\d+/g);
-        if(!frags || frags.length < 5)
+        if(!iso)
             throw Error("Failed to get current datetime");
-
-        const iso = `${frags[2]}-${frags[0]}-${frags[1]}T${frags[3]}:${frags[4]}`;
+        
         $(this).parent()
             .find(`input[name=${target}]`)
             .val(iso)

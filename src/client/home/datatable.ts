@@ -3,6 +3,8 @@ import DataTable from 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
 import './btns';
 
+import { isoToString } from 'src/date-converter';
+
 type Columns = {
     name: string,
     type: string,
@@ -17,7 +19,12 @@ async function fetchHeaders(): Promise<Columns[]> {
 export default async function init() {
     const heads = await fetchHeaders();
     const cols = heads
-        .map(({ name }) => ({ data: name }))
+        .map(({ name, type }) => {
+            return { 
+                data: name,
+                render: type === 'DATE' ? isoToString : undefined
+            }
+        })
 
     const tbl = $('#datatable').DataTable({
         ajax: "/data/",

@@ -1,3 +1,4 @@
+import { dateToISO } from "./date-converter";
 import type { ColumnInfo } from "./db";
 
 type VarRow = { [k: string]: any }
@@ -47,11 +48,15 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]): Report {
             // Type Check
             switch(type) {
                 case 'DATE':
-                    // TODO: Support other formats and convert to this one (if possible)
                     const date = new Date(val);
-                    if(date.toString() === 'Invalid Date') {
+                    const iso = dateToISO(date);
+
+                    if(!iso) {
                         passed = false;
                         details[name] = `Passed date is not valid: ${val}`;
+                    }
+                    else {
+                        input[name] = iso;
                     }
                     break;
                 case 'REAL':
