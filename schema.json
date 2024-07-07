@@ -1,0 +1,26 @@
+{
+    "transaction": {
+        "pk": "INTEGER PRIMARY KEY AUTOINCREMENT",
+        "uuid": "TEXT UNIQUE NOT NULL",
+        "shipping_date": "DATE NOT NULL",
+        "transaction_date": "DATE NOT NULL",
+        "item_description": "TEXT NOT NULL",
+        "list_price": "REAL NOT NULL",
+        "transaction_fees": "REAL",
+        "shipping_cost": "REAL NOT NULL",
+        "earnings": "REAL NOT NULL",
+        "purchase_price": "REAL NOT NULL",
+        "package_type": "TEXT NOT NULL",
+        "buyer_state": "TEXT NOT NULL",
+        "buyer_name": "TEXT NOT NULL",
+        "remarks": "TEXT"
+    },
+
+    "product": {
+        "pk": "INTEGER PRIMARY KEY AUTOINCREMENT",
+        "uuid": "TEXT UNIQUE NOT NULL",
+        "name": "TEXT UNIQUE NOT NULL",
+        "category": "TEXT NOT NULL",
+        "sub_category": "TEXT"
+    }
+}
