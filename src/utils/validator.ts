@@ -1,5 +1,5 @@
 import { dateToISO } from "./date-converter";
-import type { ColumnInfo } from "./utils/db";
+import type { ColumnInfo } from "src/utils/types/db";
 
 type VarRow = { [k: string]: any }
 type Report = { passed: boolean, details: VarRow }
