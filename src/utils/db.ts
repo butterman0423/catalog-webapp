@@ -1,4 +1,6 @@
 import type SQLite3 from 'better-sqlite3';
+import type { ColumnInfo, Entry, ValType } from './types/db';
+
 import Database from 'better-sqlite3';
 import { join } from 'node:path'
 import { randomUUID } from 'node:crypto';
@@ -6,7 +8,6 @@ import DEFAULT from 'default_tbl.json'
 
 const DB_PATH = join(__dirname, "/data/data.db");
 
-type ValType = string | number
 type Config = { [key: string]: string };
 type FieldArgs<T> = { [k in keyof T as Exclude<k, ['pk', 'uuid']>]: ValType }
 type Selector<T> = {
@@ -25,15 +26,6 @@ function check(str: string) {
         throw Error(`FATAL: INJECTION DETECTED with ${str}`)
 }
 
-export type Entry = { [key: string]: any };
-export type ColumnInfo = {
-    cid: number,
-    name: string,
-    type: string,
-    notnull: boolean,
-    dflt_value: any,
-    pk: boolean
-}
 export class DB<Fields extends Config> {
     db: SQLite3.Database
     conf: Fields

@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import { DB } from "../utils/db";
-import type { SqliteError, Statement } from 'better-sqlite3';
+import { DB } from "src/utils/db";
+import type { Statement } from 'better-sqlite3';
 import fileUpload from 'express-fileupload'
 
-import { checkRow } from '../validator'
-import { process } from 'src/merger';
+import { checkRow } from 'src/utils/validator'
+import { process } from 'src/utils/merger';
 
 type FileInfo = {
     name: string,

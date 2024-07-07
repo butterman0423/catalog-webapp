@@ -3,7 +3,7 @@ import DataTable from 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
 import './btns';
 
-import { isoToString } from 'src/date-converter';
+import { isoToString } from 'src/utils/date-converter';
 
 type Columns = {
     name: string,
