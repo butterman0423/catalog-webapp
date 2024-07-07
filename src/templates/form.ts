@@ -1,4 +1,4 @@
-import { ColumnInfo } from "../db";
+import { ColumnInfo } from "../utils/db";
 
 import DateTime from "./datetime";
 

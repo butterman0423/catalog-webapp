@@ -5,7 +5,7 @@ import HTML from "../templates/html";
 import HomePage from '../templates/home-page';
 import ToolPage from '../templates/tool-page'
 
-import { DB } from "../db"
+import { DB } from "../utils/db"
 
 const db = new DB("sample1");
 db.init();

@@ -2,7 +2,7 @@ import { createReadStream } from 'fs';
 import { createInterface } from 'readline/promises';
 import csvConvert from 'convert-csv-to-json';
 
-import type { DB } from './db';
+import type { DB } from './utils/db';
 import { checkCSVColumns, checkRow } from './validator';
 
 type CSVConfig = {

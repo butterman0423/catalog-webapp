@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { DB } from "../db";
+import { DB } from "../utils/db";
 import type { SqliteError, Statement } from 'better-sqlite3';
 import fileUpload from 'express-fileupload'
 

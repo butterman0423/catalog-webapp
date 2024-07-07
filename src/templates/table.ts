@@ -1,4 +1,4 @@
-import { ColumnInfo, Entry } from "../db";
+import { ColumnInfo, Entry } from "../utils/db";
 
 function buildHead(headers: ColumnInfo[]): string {
     const cols = headers
