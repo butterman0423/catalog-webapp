@@ -3,7 +3,7 @@ import 'bootstrap';
 import DTinit from './datatable'
 import './btns';
 
-import { dateToISO } from 'src/utils/date-converter';
+import { dateToISO } from 'src/utils/parsers/date-parser';
 import * as Modal from './modal';
 
 $(async () => {

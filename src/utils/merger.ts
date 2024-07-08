@@ -1,68 +1,36 @@
-import { createReadStream } from 'fs';
-import { createInterface } from 'readline/promises';
-import csvConvert from 'convert-csv-to-json';
-
 import type { DB } from 'src/utils/db';
-import { checkCSVColumns, checkRow } from './validator';
+import type { Dict } from 'src/utils/types'
 
-type CSVConfig = {
-    delimiter: string,
-    quoted: boolean
-}
-type VarMap = { [key: string]: any }
-
-// Guess what delimiter and "" file is may using
-function guessCSVConfig(line: string): CSVConfig {
-    const matchRes = line.match(/[;\|,]/);
-    if(!matchRes)
-        throw Error("CSV delimeter not found");
-
-    return {
-        delimiter: matchRes[0],
-        quoted: line.includes('"')
-    }
-}
+import { guessCSVConfig, getCSVHeaders, csvToJSON } from './parsers/csv-parser';
+import { hasValidColumns, checkRow } from './checks/db-check';
 
 export async function process(path: string, db: DB<any>) {
     const headers = db.headers()
-        .filter(({ pk }) => !pk)
-
-    const stream = createReadStream(path);
-    const rl = createInterface({
-        input: stream,
-        crlfDelay: Infinity
-    });
-    const iter = rl[Symbol.asyncIterator]();
-
-    // Validate
-    let conf: CSVConfig;
-    const line: string = (await iter.next()).value;
+        .filter(({ pk }) => !pk);
 
     const reqs = headers.map( ({ name }) => name );
-    const matches = line.match(/[\w\s_]+/g);
+    const inHeads = await getCSVHeaders(path);
 
-    if(!matches)
-        throw Error("Failed to parse column headers");
+    if(!inHeads)
+        //throw Error("Failed to parse column headers");
+        return;
+    if(!hasValidColumns(inHeads, reqs)) {
+        return;
+    }
 
-    const inputs = matches.map((v) => v);
-
-    checkCSVColumns(inputs, reqs)
-    conf = guessCSVConfig(line);
-
-    const json = csvConvert
-        .fieldDelimiter(conf.delimiter)
-        .supportQuotedField(true)
-        .formatValueByType(true)
-        .getJsonFromCsv(path);
+    const conf = await guessCSVConfig(path);
+    const json = await csvToJSON(path, conf);
 
     json.forEach(v => { 
         const res = checkRow(v, headers);
-        if(!res.passed) 
-            throw Error(res.details.toString())
+        if(!res.passed) {
+            console.log(res.details.toString());
+            return;
+        }
     });
 
     // Push to DB
-    const merge = db.raw().transaction((items: VarMap[]) => {
+    const merge = db.raw().transaction((items: Dict[]) => {
         for(let item of items) {
             const uuid = item.uuid;
             delete item.id;

@@ -1,10 +1,11 @@
+import type { Statement } from 'better-sqlite3';
+
 import express from 'express';
 import cors from 'cors';
-import { DB } from "src/utils/db";
-import type { Statement } from 'better-sqlite3';
 import fileUpload from 'express-fileupload'
 
-import { checkRow } from 'src/utils/validator'
+import { DB } from "src/utils/db";
+import { checkRow } from 'src/utils/checks/db-check';
 import { process } from 'src/utils/merger';
 
 type FileInfo = {
@@ -91,7 +92,7 @@ router.post("/import", async (req, res) => {
         return;
     }
     
-    let { name, tempFilePath } = file as FileInfo;
+    const { name, tempFilePath } = file as FileInfo;
     const ext = name.substring(name.indexOf('.') + 1);
 
     switch(ext) {

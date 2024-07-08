@@ -1,36 +1,45 @@
-import { dateToISO } from "./date-converter";
-import type { ColumnInfo } from "src/utils/types/db";
+import type { ColumnInfo } from "../types/db";
+import type { Dict } from "../types";
 
-type VarRow = { [k: string]: any }
-type Report = { passed: boolean, details: VarRow }
+import { dateToISO } from "../parsers/date-parser";
+import { toRealFixed, toInt } from "../parsers/val-parser";
+
+type Report = { passed: boolean, details: Dict }
 
 // Valid CSV file
 // - Matching Column Names
-export async function checkCSVColumns(inputs: string[], headers: string[]) {
+export async function hasValidColumns(inputs: string[], headers: string[]): Promise<boolean> {
     // Existent 'pk' check
-    if(inputs.includes('pk'))
-        throw Error("CSV columns includes 'pk'")
+    if(inputs.includes('pk')) {
+        console.log("Columns includes 'pk'")
+        return false;
+    }
 
     // Duplicate check
     for(let i = 0; i < inputs.length - 1; i++) {
         for(let j = i + 1; j < inputs.length; j++) {
-            if(inputs[i] === inputs[j])
-                throw Error(`CSV columns contains duplicates: ${inputs[i]}, ${inputs[j]}`)
+            if(inputs[i] === inputs[j]) {
+                console.log(`Columns contains duplicates: ${inputs[i]}, ${inputs[j]}`);
+                return false;
+            }
         }
     }
 
     // Inclusion check
-    if( !headers.every((v) => inputs.includes(v)) )
-        throw Error("Some required columns are missing")
+    if( !headers.every((v) => inputs.includes(v)) ) {
+        console.log("Some required columns are missing");
+        return false;
+    }
+    return true;
 }
 
 // Cell Type Validation
 // - string ? DATE
 // - number ? REAL (two decimal places)
 // - NON NULL Fields
-export function checkRow(input: VarRow, confs: ColumnInfo[]): Report {
+export function checkRow(input: Dict, confs: ColumnInfo[]): Report {
     let passed = true;
-    const details: VarRow = {};
+    const details: Dict = {};
 
     for(const conf of confs) {
         const { name, type, notnull } = conf;
@@ -45,34 +54,30 @@ export function checkRow(input: VarRow, confs: ColumnInfo[]): Report {
         }
 
         if(!isEmpty) {
+            let v: any;
             // Type Check
             switch(type) {
                 case 'DATE':
-                    const date = new Date(val);
-                    const iso = dateToISO(date);
-
-                    if(!iso) {
+                    const iso = dateToISO(val);
+                    if(iso === '') {
                         passed = false;
                         details[name] = `Passed date is not valid: ${val}`;
+                        break;
                     }
-                    else {
-                        input[name] = iso;
-                    }
+                    input[name] = iso;
                     break;
                 case 'REAL':
-                    if(typeof val !== 'number' && !(val=parseFloat(val))) {
+                    v = toRealFixed(val);
+                    if(!v) {
                         passed = false;
                         details[name] = `Passed number is not valid: ${val}`;
+                        break;
                     }
-                    else {
-                        input[name] = (val as number).toFixed(2);
-                    }
+                    input[name] = v;
                     break;
                 case 'INTEGER':
-                    if(typeof val === 'string')
-                        val = parseInt(val);
-
-                    if(!Number.isInteger(val)) {
+                    v = toInt(val);
+                    if(!v) {
                         passed = false;
                         details[name] = `Passed integer is not valid: ${val}`;
                     }

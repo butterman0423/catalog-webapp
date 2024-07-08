@@ -1,5 +1,5 @@
 import type SQLite3 from 'better-sqlite3';
-import type { ColumnInfo, Entry, ValType } from './types/db';
+import type { ColumnInfo, Entry, CellType } from './types/db';
 
 import Database from 'better-sqlite3';
 import { join } from 'node:path'
@@ -9,11 +9,11 @@ import DEFAULT from 'default_tbl.json'
 const DB_PATH = join(__dirname, "/data/data.db");
 
 type Config = { [key: string]: string };
-type FieldArgs<T> = { [k in keyof T as Exclude<k, ['pk', 'uuid']>]: ValType }
+type FieldArgs<T> = { [k in keyof T as Exclude<k, ['pk', 'uuid']>]: CellType }
 type Selector<T> = {
     target: keyof T,
     op: '=' | 'LIKE' | 'BETWEEN',
-    to: ValType | ValType[]
+    to: CellType | CellType[]
 }
 
 function makeSlots(pttn: string, amount: number) {

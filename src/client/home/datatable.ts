@@ -1,18 +1,13 @@
+import type { ColumnInfo } from 'src/utils/types/db'
+
 import $ from 'jquery';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-select-bs5';
 import './btns';
 
-import { isoToString } from 'src/utils/date-converter';
+import { isoToString } from 'src/utils/parsers/date-parser';
 
-type Columns = {
-    name: string,
-    type: string,
-    notnull: boolean,
-    pk: boolean
-}
-
-async function fetchHeaders(): Promise<Columns[]> {
+async function fetchHeaders(): Promise<ColumnInfo[]> {
     return $.ajax("/data/headers");
 }
 

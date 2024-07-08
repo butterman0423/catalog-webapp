@@ -1,3 +1,5 @@
+import { isValidDate } from "../checks/date-check";
+
 const locale: Intl.DateTimeFormatOptions = {
     timeZone: 'America/New_York',
     hour12: false,
@@ -12,7 +14,7 @@ export function dateToISO(date: Date | string): string {
     if(typeof date === 'string')
         date = new Date(date);
 
-    if(date.toString() === 'Invalid Date')
+    if(!isValidDate(date))
         return '';
 
     const datetime = date.toLocaleString('en-us', locale);
@@ -27,7 +29,7 @@ export function dateToISO(date: Date | string): string {
 
 export function isoToString(iso: string): string {
     const date = new Date(iso);
-    if(date.toString() === 'Invalid Date')
+    if(!isValidDate(date))
         return '';
 
     return date.toLocaleString('en-us', { ...locale, hour12: true });
