@@ -1,10 +1,11 @@
 import type SQLite3 from 'better-sqlite3';
-import type { ColumnInfo, Entry, CellType } from './types/db';
+import type { ColumnInfo, Entry, CellType, SchemaPreset } from './types/db';
 
 import Database from 'better-sqlite3';
 import { join } from 'node:path'
 import { randomUUID } from 'node:crypto';
-import DEFAULT from 'default_tbl.json'
+
+import Schema from 'schema.json'
 
 const DB_PATH = join(__dirname, "/data/data.db");
 
@@ -32,11 +33,15 @@ export class DB<Fields extends Config> {
     name: string
     private _headers: ColumnInfo[] | null;
 
-    constructor(name: string, conf?: Fields) {
+    constructor(name: string, conf: Fields | SchemaPreset) {
         this.db = new Database(DB_PATH);
 
         this.name = name;
-        this.conf = (conf || DEFAULT) as Fields;
+
+        if(typeof conf === 'string') {
+            conf = (Schema[conf] as unknown) as Fields;
+        }
+        this.conf = conf;
         this._headers = null;
 
         // "name" and "conf" are subject to injections

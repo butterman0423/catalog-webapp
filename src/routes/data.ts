@@ -13,7 +13,7 @@ type FileInfo = {
     tempFilePath: string
 }
 
-const db = new DB("sample1");
+const db = new DB("transactions", "transaction");
 const router = express.Router();
 
 router.use(cors());

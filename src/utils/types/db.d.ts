@@ -1,3 +1,5 @@
+export type SchemaPreset = "transaction" | "product";
+
 export type CellType = string | number
 export type ColumnType = "DATE" | "REAL" | "INTEGER" | "TEXT" | "GLOB"
 
