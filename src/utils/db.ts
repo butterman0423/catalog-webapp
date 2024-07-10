@@ -4,9 +4,12 @@ import type { ColumnInfo, Entry, CellType, SchemaPreset } from './types/db';
 import Database from 'better-sqlite3';
 import { join } from 'node:path'
 import { randomUUID } from 'node:crypto';
+import { checkInjection } from './checks/db-check';
+import { makeSlots } from './parsers/db-parser';
 
 import Schema from 'schema.json'
 
+const check = checkInjection;       // Lazy to rename all check() calls
 const DB_PATH = join(__dirname, "/data/data.db");
 
 type Config = { [key: string]: string };
@@ -15,16 +18,6 @@ type Selector<T> = {
     target: keyof T,
     op: '=' | 'LIKE' | 'BETWEEN',
     to: CellType | CellType[]
-}
-
-function makeSlots(pttn: string, amount: number) {
-    return pttn + `, ${pttn}`.repeat(amount - 1);
-}
-
-// Manual SQL injection check
-function check(str: string) {
-    if(str.match(/--/) !== null)
-        throw Error(`FATAL: INJECTION DETECTED with ${str}`)
 }
 
 export class DB<Fields extends Config> {

@@ -7,6 +7,7 @@ import fileUpload from 'express-fileupload'
 import { DB } from "src/utils/db";
 import { checkRow } from 'src/utils/checks/db-check';
 import { process } from 'src/utils/merger';
+import { parseSQL } from 'src/utils/parsers/db-parser';
 
 type FileInfo = {
     name: string,
@@ -109,18 +110,27 @@ router.post("/import", async (req, res) => {
 
 
 /** ROUTE SPECIFICALLY FOR TOOLING **/
-const sqlRegex = /\s(?=\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bDROP\b|\bCREATE\b)/gi
+type MappedStmt = {
+    willQuery: boolean,
+    stmt: Statement,
+    src: string
+}
+
+type SQLResult = {
+    query: string,
+    dat: any,
+    cols: string[]
+}
 
 router.get("/dev/", (req, res) => {
-    // For simplicity, use the raw SQLite Database
-    const rdb = db.raw();
     try {
         const code = req.query['code'] as string;
         if(!code) 
             throw Error("Missing code")
 
-        const stmts = code
-            .split(sqlRegex)
+        // For simplicity, use the raw SQLite Database
+        const rdb = db.raw();
+        const stmts = parseSQL(code)
             .map(cmd => ({
                 willQuery: cmd.match(/\bSELECT\b/i) !== null,
                 stmt: rdb.prepare(cmd),
@@ -130,8 +140,8 @@ router.get("/dev/", (req, res) => {
         if(stmts.length === 0) 
             throw Error("No valid SQLite statements")
 
-        const output: ({ query: string, dat: any, cols: string[] })[] = []
-        const runAll = rdb.transaction((stmts: {willQuery: boolean, stmt: Statement, src: string}[]) => 
+        const output: SQLResult[] = [];
+        const runAll = rdb.transaction((stmts: MappedStmt[]) => 
             stmts.forEach( ({ willQuery, stmt, src }) => {
                 if(willQuery) {
                     const dat = stmt.raw().all() as any;

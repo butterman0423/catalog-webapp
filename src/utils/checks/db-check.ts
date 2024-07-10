@@ -6,6 +6,12 @@ import { toRealFixed, toInt } from "../parsers/val-parser";
 
 type Report = { passed: boolean, details: Dict }
 
+// Manual SQL injection check
+export function checkInjection(str: string) {
+    if(str.match(/--/) !== null)
+        throw Error(`FATAL: INJECTION DETECTED with ${str}`)
+}
+
 // Valid CSV file
 // - Matching Column Names
 export async function hasValidColumns(inputs: string[], headers: string[]): Promise<boolean> {
