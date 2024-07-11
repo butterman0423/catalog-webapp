@@ -7,7 +7,7 @@ import ToolPage from '../templates/tool-page'
 
 import { DB } from "../utils/db"
 
-const db = new DB("transactions", "transaction");
+const db = new DB("transactions", "transactions");
 db.init();
 
 // Serve rendered html files

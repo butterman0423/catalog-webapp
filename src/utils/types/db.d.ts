@@ -1,4 +1,4 @@
-export type SchemaPreset = "transaction" | "product";
+export type SchemaPreset = "transactions" | "products";
 
 export type CellType = string | number
 export type ColumnType = "DATE" | "REAL" | "INTEGER" | "TEXT" | "GLOB"

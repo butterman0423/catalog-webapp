@@ -1,12 +1,10 @@
-import type { Statement } from 'better-sqlite3';
-
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload'
 
 import { DB } from "src/utils/db";
 import { checkRow } from 'src/utils/checks/db-check';
-import { process } from 'src/utils/merger';
+import { execSQL, processCSV } from 'src/utils/processor';
 import { parseSQL } from 'src/utils/parsers/db-parser';
 
 type FileInfo = {
@@ -14,7 +12,7 @@ type FileInfo = {
     tempFilePath: string
 }
 
-const db = new DB("transactions", "transaction");
+const db = new DB("transactions", "transactions");
 const router = express.Router();
 
 router.use(cors());
@@ -98,7 +96,7 @@ router.post("/import", async (req, res) => {
 
     switch(ext) {
         case 'csv':
-            await process(tempFilePath, db)
+            await processCSV(tempFilePath, db)
             break;
         default:
             res.sendStatus(400);
@@ -110,55 +108,16 @@ router.post("/import", async (req, res) => {
 
 
 /** ROUTE SPECIFICALLY FOR TOOLING **/
-type MappedStmt = {
-    willQuery: boolean,
-    stmt: Statement,
-    src: string
-}
-
-type SQLResult = {
-    query: string,
-    dat: any,
-    cols: string[]
-}
-
-router.get("/dev/", (req, res) => {
+router.get("/dev/", async (req, res) => {
     try {
         const code = req.query['code'] as string;
         if(!code) 
             throw Error("Missing code")
-
-        // For simplicity, use the raw SQLite Database
-        const rdb = db.raw();
-        const stmts = parseSQL(code)
-            .map(cmd => ({
-                willQuery: cmd.match(/\bSELECT\b/i) !== null,
-                stmt: rdb.prepare(cmd),
-                src: cmd
-            }));
-
-        if(stmts.length === 0) 
-            throw Error("No valid SQLite statements")
-
-        const output: SQLResult[] = [];
-        const runAll = rdb.transaction((stmts: MappedStmt[]) => 
-            stmts.forEach( ({ willQuery, stmt, src }) => {
-                if(willQuery) {
-                    const dat = stmt.raw().all() as any;
-                    const cols = stmt.columns()
-                        .map(({ name }) => name);
-                    output.push({ query: src, dat, cols });
-                }
-                    
-                else
-                    stmt.run();
-            })
-        );
         
-        runAll(stmts);
+        const output = await execSQL(db, code);
         res.send(output);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(400).send((error as Error).toString());
     }
 });

@@ -24,10 +24,18 @@ export class DB<Fields extends Config> {
     db: SQLite3.Database
     conf: Fields
     name: string
-    private _headers: ColumnInfo[] | null;
+    private _headers: ColumnInfo[] | null
 
-    constructor(name: string, conf: Fields | SchemaPreset) {
-        this.db = new Database(DB_PATH);
+    static makeAll(path: string): void {
+        for(const key in Schema) {
+            const db = new DB(key, key as SchemaPreset, path);
+            db.init();
+            db.close();
+        }
+    }
+
+    constructor(name: string, conf: Fields | SchemaPreset, path: string = DB_PATH) {
+        this.db = new Database(path);
 
         this.name = name;
 
@@ -138,6 +146,10 @@ export class DB<Fields extends Config> {
 
         this._headers = this.db.pragma(`table_info(${this.name})`) as ColumnInfo[];
         return this._headers;
+    }
+
+    close(): void {
+        this.db.close();
     }
 
     raw(): SQLite3.Database {

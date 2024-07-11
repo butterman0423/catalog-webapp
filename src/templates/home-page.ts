@@ -3,7 +3,7 @@ import Form from "../templates/form";
 import Dropdown from "../templates/dropdown";
 import DateRange from "../templates/date-range"
 import Modal from "../templates/modal";
-import type { ColumnInfo, Entry } from 'src/db';
+import type { ColumnInfo, Entry } from 'src/utils/types/db';
 
 export type HomePageConfig = {
     headers: ColumnInfo[]

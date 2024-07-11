@@ -1,5 +1,5 @@
 {
-    "transaction": {
+    "transactions": {
         "pk": "INTEGER PRIMARY KEY AUTOINCREMENT",
         "uuid": "TEXT UNIQUE NOT NULL",
         "shipping_date": "DATE NOT NULL",
@@ -16,7 +16,7 @@
         "remarks": "TEXT"
     },
 
-    "product": {
+    "products": {
         "pk": "INTEGER PRIMARY KEY AUTOINCREMENT",
         "uuid": "TEXT UNIQUE NOT NULL",
         "name": "TEXT UNIQUE NOT NULL",
